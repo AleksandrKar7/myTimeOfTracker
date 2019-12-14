@@ -1,0 +1,34 @@
+﻿.parent-panel
+{
+        /*display:flex;*/
+    justify-content: center;
+
+}
+
+.child-panel
+{
+       /*flex:1;*/ 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.parent-admin-panel
+{
+    display:flex;
+}
+
+.child-admin-panel
+{
+    flex:1; 
+}
+
+.table-block
+{
+    display:table;
+    width:100%;
+}
+
+.description
+{
+    word-break:break-word;
+}
