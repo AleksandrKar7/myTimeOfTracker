@@ -1,0 +1,78 @@
+﻿@using TimeOffTracker.Models;
+@using TimeOffTracker.Controllers;
+@model ListShowUserViewModel
+@{
+    ViewBag.Title = "Admin users panel";
+}
+<link rel="stylesheet" href="~/Content/PanelTable.css">
+
+<div class="parent-admin-panel">
+    <div class="child-admin-panel panel panel-primary">
+        <div class="panel-heading">
+            Accounts
+        </div>
+        <table class="table table-striped">
+            <tr>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Employment date</th>
+                <th>Roles</th>
+                <th>@Html.ActionLink("Create", "CreateUser", "Admin", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })</th>
+            </tr>
+            @if (Model.MenuItems.Count == 0)
+            {
+                <tr>
+                    <td colspan="3" class="text-center">No account... Stop! Who are you?</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var user in Model.MenuItems)
+                {
+                    if (user.LockoutTime == null)
+                    {
+                        <tr>
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>@user.EmploymentDate</td>
+                            <td>@user.AllRoles</td>
+                            <td>
+                                @using (Html.BeginForm("ConfirmSwitchLockoutUser", "Admin", FormMethod.Get))
+                                {
+                                    <input type="hidden" value="@user.Email" name="email" />
+                                    <button class="btn btn-danger btn-xs" type="submit">Lock account</button>
+                                }
+                                @using (Html.BeginForm("EditUser", "Admin", FormMethod.Get))
+                                {
+                                    <input type="hidden" value="@user.Email" name="email" />
+                                    <button class="btn btn-default btn-xs" type="submit">Edit account</button>
+                                }
+                                @using (Html.BeginForm("EditUserVacationDays", "Admin", FormMethod.Get))
+                                {
+                                    <input type="hidden" value="@user.Email" name="email" />
+                                    <button class="btn btn-warning btn-xs" type="submit">Vacation control</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="danger">
+                            <td>@user.FullName</td>
+                            <td>@user.Email</td>
+                            <td>@user.EmploymentDate</td>
+                            <td>@user.AllRoles</td>
+                            <td>
+                                @using (Html.BeginForm("ConfirmSwitchLockoutUser", "Admin", FormMethod.Get))
+                                {
+                                    <input type="hidden" value="@user.Email" name="email" />
+                                    <button class="btn btn-success btn-xs" type="submit">Unlock account</button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </table>
+    </div>
+</div>

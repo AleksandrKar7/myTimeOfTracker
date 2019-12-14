@@ -1,0 +1,106 @@
+﻿@model TimeOffTracker.Models.EditUserViewModel
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("EditUser", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h3>Editing the account</h3>
+
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.OldFullName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.OldFullName, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NewFullName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.NewFullName, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.OldEmail, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.OldEmail, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.NewEmail, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.NewEmail, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.OldEmploymentDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.OldEmploymentDate, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.NewEmploymentDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.EditorFor(x => x.NewEmploymentDate, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.OldRoles, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.OldRoles, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.AvailableRoles, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @foreach (var item in Model.AvailableRoles)
+            {
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"
+                               name="SelectedRoles"
+                               value="@item.Value" checked="@item.Selected" /> @item.Text
+                        </label>
+                    </div>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox"
+               id="IsChangePassword"
+               name="IsChangePassword"
+               value="true" onchange="change()"/> Set new password
+    </div>
+
+    <div class="form-group" id="DivNewPassword" hidden="hidden">
+        <label class="col-md-2 control-label" for="Key">New password</label>
+        <div class="col-md-10">
+            <input type="text" class="form-control" name="NewPassword" value="@Model.NewPassword"/>
+        </div>
+    </div>
+
+    <script>
+        var checkbox = document.getElementById("IsChangePassword");
+        var div = document.getElementById("DivNewPassword");
+        function change() {
+            if (checkbox.checked === true) {
+                div.hidden = "";
+            }
+            if(checkbox.checked === false)
+            {
+                div.hidden = "hidden";
+            }
+            };
+    </script>
+
+    <button type="submit" class="btn btn-primary">Edit account</button>
+
+    @Html.ActionLink("Cancel", "AdminUsersPanel", null, new { @class = "btn btn-default" })
+}

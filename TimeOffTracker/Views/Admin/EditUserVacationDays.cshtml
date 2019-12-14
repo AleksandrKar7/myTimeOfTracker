@@ -1,0 +1,55 @@
+﻿@model TimeOffTracker.Models.EditUserVacationDaysViewModel
+@{
+    ViewBag.Title = "Vacation control";
+}
+
+@using (Html.BeginForm("EditUserVacationDays", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h3>Vacation control</h3>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.FullName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.FullName, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.Email, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmploymentDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.EmploymentDate, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AllRoles, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.AllRoles, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+            @foreach (var item in Model.Vacations)
+            {
+                    <input type="hidden" value="@item.Key" name="VacationNames" />
+                    <label class="col-md-2 control-label" for="Key">@item.Key</label>
+
+                    <div class="col-md-10">
+                        <input type="number" class="form-control" name="VacationDays" value="@item.Value" min="0" />
+                    </div>
+            }
+    </div>
+    <button type="submit" class="btn btn-warning">Edit vacation days</button>
+
+    @Html.ActionLink("Cancel", "AdminUsersPanel", null, new { @class = "btn btn-default" })
+}
+
+
+
+

@@ -1,0 +1,54 @@
+﻿@model TimeOffTracker.Models.ShowUserViewModel
+
+@{
+    ViewBag.Title = "Lock account";
+}
+
+@using (Html.BeginForm("SwitchLockoutUser", "Admin", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    if (Model.LockoutTime == null)
+    {
+        <h3>Lock account?</h3>
+    }
+    else
+    {
+        <h3>Unlock account?</h3>
+    }
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.FullName, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.FullName, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.Email, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.EmploymentDate, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.EmploymentDate, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.AllRoles, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.AllRoles, new { @readonly = "readonly", @class = "form-control" })
+        </div>
+    </div>
+    if (Model.LockoutTime == null)
+    {
+        <input type="submit" class="btn btn-danger" value="Lock" />
+    }
+    else
+    {
+        <input type="submit" class="btn btn-success" value="Unlock" />
+    }
+
+    @Html.ActionLink("Cancel", "AdminUsersPanel", null, new { @class = "btn btn-default" })
+}

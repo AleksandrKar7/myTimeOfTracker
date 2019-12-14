@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        
+        @if (User.IsInRole("Employee"))
+        {
+            <li>
+                @Html.ActionLink("User panel", "UserHistoryPanel", "VacationRequest", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            </li>
+            <li>
+                @Html.ActionLink("Create Request", "VacationRequest", "VacationRequest")
+            </li>
+        }
+        
+        
+        @if (User.IsInRole("Admin"))
+         {
+            <li>
+                @Html.ActionLink("Admin panel", "AdminUsersPanel", "Admin", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            </li>
+         }
+
+        @if (User.IsInRole("Manager"))
+        {
+            <li>
+                @Html.ActionLink("Active requests", "ManagerPanel", "Manager",
+                routeValues: null, htmlAttributes: new { id = "loginLink" })
+            </li>
+            <li>
+                @Html.ActionLink("Confirmation history", "History", "Manager",
+                routeValues: null, htmlAttributes: new { })
+            </li>
+        }
+
+        <li>
+            @Html.ActionLink("Hello, " + User.Identity.GetUserName() + "!", "Index", "Home", routeValues: null, htmlAttributes: new { title = "Manage" })
+        </li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Exit</a></li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li>@Html.ActionLink("Sign in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+    </ul>
+}
