@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using TimeOffTracker.Models;
 
-namespace TimeOffTracker.Business
+namespace TimeOffTracker.Data
 {
-    public class VacationControlDataModel : IVacationControlDataModel
+    public class VacationControlData : IVacationControlData
     {
-        public void BindingMissingVacationByEmail(string email)
+        public void BindingMissingVacation(string email)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -34,8 +34,20 @@ namespace TimeOffTracker.Business
             }
         }
 
-        //Возвращает список отпусков которые были добавлены пользователю
-        public List<string> BindingMissingVacationWithMessageByEmail(string email)
+        private bool DoesUserContainVacationType(VacationTypes vacationType, List<UserVacationDays> userVacations)
+        {
+            foreach (var item in userVacations)
+            {
+                if (item.VacationType == vacationType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private const int daysInYear = 365;
+
+        public List<string> BindingMissingVacationWithMessage(string email)
         {
             List<string> result = new List<string>();
             using (ApplicationDbContext context = new ApplicationDbContext())
@@ -64,20 +76,7 @@ namespace TimeOffTracker.Business
             return result;
         }
 
-        private bool DoesUserContainVacationType(VacationTypes vacationType, List<UserVacationDays> userVacations)
-        {
-            foreach (var item in userVacations)
-            {
-                if (item.VacationType == vacationType)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        private const int daysInYear = 365;
-
-        public void UpdateUserVacationDaysByEmail(string email)
+        public void UpdateUserVacationDays(string email)
         {
             bool isOk = true;
             DateTime tempLastUpdate = DateTime.Now;
@@ -108,9 +107,8 @@ namespace TimeOffTracker.Business
                     }
                 }
 
-            } while (!isOk);
+            } while (!isOk);  
         }
-
 
         //Скольк лет нужно отступить перед тем как сжечь 
         private const int countYearsBeforeBurn = 2;
@@ -200,8 +198,6 @@ namespace TimeOffTracker.Business
             }
         }
 
-
-
         //userEmail - email или логин пользователя 
         //targetStatus - сортировка по статусу (если предать null то сортировки по статусу не будет)
         //allChainInStatus - цепочка подтверждений целиком состоит из targetStatus?
@@ -250,8 +246,6 @@ namespace TimeOffTracker.Business
             }
         }
 
-
-
         private bool DoesChainContainStatus(ApplicationDbContext context, RequestStatuses type, Requests request)
         {
             List<RequestChecks> requestChecks = context.RequestChecks.Where(m => m.Request.Id == request.Id).ToList();
@@ -285,5 +279,6 @@ namespace TimeOffTracker.Business
             }
             return true;
         }
+
     }
 }

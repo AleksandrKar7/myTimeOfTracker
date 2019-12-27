@@ -9,7 +9,7 @@ using TimeOffTracker.Models;
 
 namespace TimeOffTracker.Business
 {
-    public interface IAdminDataModel
+    public interface IAdminBusiness
     {
         ListShowUserViewModel GetAllUsersForShow();
 
@@ -21,10 +21,10 @@ namespace TimeOffTracker.Business
         EditUserViewModel GetUserForEditByEmail(ApplicationUserManager UserManager, string email);
         IdentityResult EditUser(ApplicationUserManager UserManager, EditUserViewModel model);
 
-        EditUserVacationDaysViewModel GetUserForEditVacationDaysByEmail(ApplicationUserManager UserManager, string email);
-        string EditUserVacationDays(EditUserVacationDaysViewModel model);
+        EditUserVacationDaysViewModel GetUserByEmailForEditVacationDays(ApplicationUserManager UserManager, string email);
+        string EditUserVacationDays(ApplicationUserManager userManager, EditUserVacationDaysViewModel model);
 
-        Dictionary<string, int> GetVacationDictionaryByEmail(string email);
+        Dictionary<string, int> GetUserVacationDictionary(string email);
         IList<SelectListItem> GetSelectListItemRoles();
         IList<SelectListItem> GetSelectListItemRoles(IList<string> roles);
     }
