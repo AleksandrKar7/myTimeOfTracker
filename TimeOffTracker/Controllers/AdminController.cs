@@ -8,7 +8,7 @@ using System;
 using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using System.Collections.Generic;
-using TimeOffTracker.Business;
+using TimeOffTracker.BLL;
 
 namespace TimeOffTracker.Controllers
 {
@@ -16,7 +16,8 @@ namespace TimeOffTracker.Controllers
     {
         IAdminBusiness _adminBusiness;
         IVacationControlBusiness _VCBusiness;
-
+        //public AdminController() { }
+        //public AdminController() : this(new IAdminBusiness(), new IVacationControlBusiness()) { }
         public AdminController(IAdminBusiness adminDataModel, IVacationControlBusiness vacationControlDataModel)
         {
             _adminBusiness = adminDataModel;
