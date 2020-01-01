@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeOffTracker", "TimeOffTracker\TimeOffTracker.csproj", "{32138D00-A864-4E0C-ADF0-9A606A4AF0A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "TimeOffTracker\Web.csproj", "{32138D00-A864-4E0C-ADF0-9A606A4AF0A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{68ABD796-F101-4A91-97A6-39D11B082F3D}"
 EndProject
