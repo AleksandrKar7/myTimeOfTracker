@@ -81,16 +81,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Services\Business\IAdminBusiness.cs" />
-    <Compile Include="Services\Business\IVacationControlDataModel.cs" />
-    <Compile Include="Services\Data\IAdminData.cs" />
-    <Compile Include="Services\Data\IVacationControlData.cs.cs" />
-    <Compile Include="Migrations\201912141425081_demo.cs" />
-    <Compile Include="Migrations\201912141425081_demo.Designer.cs">
-      <DependentUpon>201912141425081_demo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Business\IAdminBusiness.cs" />
+    <Compile Include="Business\IVacationControlDataModel.cs" />
+    <Compile Include="Data\IAdminData.cs" />
+    <Compile Include="Data\IVacationControlData.cs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -102,11 +96,6 @@
       <Project>{0c5e6c3e-eb2a-4b58-ba7b-1ee0fe2fd84b}</Project>
       <Name>ViewModels</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201912141425081_demo.resx">
-      <DependentUpon>201912141425081_demo.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
