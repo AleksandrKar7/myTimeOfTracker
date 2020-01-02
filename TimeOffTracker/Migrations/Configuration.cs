@@ -56,7 +56,32 @@ namespace TimeOffTracker.Migrations
             // CreateTestRequest(context);
             // Создание пожилого рабочего (для проверки сжигания и панели пользователя)
             //CreateOld(context);
+            CreateGroupOfEmployee(context, 30);
         }
+
+        private void CreateGroupOfEmployee(ApplicationDbContext context, int count)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
+            List<ApplicationUser> users = new List<ApplicationUser>();
+            for (int i = 0; i < count; i++)
+            {
+                users.Add(new ApplicationUser
+                {
+                    UserName = "Employee" + i + "@gmail.com",
+                    Email = "Employee" + i + "@gmail.com",
+                    FullName = "Employee" + i,
+                    EmploymentDate =  new DateTime(2019, 12, 12) - new TimeSpan(i * 30, 0, 0, 0)
+                });
+                if (userManager.Create(users[i], "123456-Pass").Succeeded)
+                {
+                    userManager.AddToRole(users[i].Id, "Employee");
+                }
+
+            }
+
+
+
+            }
 
         private void CreateOld(ApplicationDbContext context)
         {

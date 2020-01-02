@@ -31,6 +31,21 @@ namespace TimeOffTracker.Controllers
         }
 
         [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public ActionResult GetPartOfUsers()
+        {
+            //var temp = _adminBusiness.GetAllUsersForShow();
+            //var onlyOne = new ListShowUserViewModel();
+            ////onlyOne.MenuItems.Add(temp.MenuItems[0]);
+            //onlyOne.MenuItems = new List<ShowUserViewModel>();
+            //onlyOne.MenuItems.Add(temp.MenuItems[0]);
+
+
+            //return PartialView(onlyOne);
+            return PartialView(_adminBusiness.GetAllUsersForShow());
+        }
+
+        [Authorize(Roles = "Admin")]
         public ActionResult CreateUser()
         {
             CreateUserViewModel model = new CreateUserViewModel
