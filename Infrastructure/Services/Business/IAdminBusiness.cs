@@ -11,7 +11,8 @@ namespace TimeOffTracker.BLL
 {
     public interface IAdminBusiness
     {
-        ListShowUserViewModel GetAllUsersForShow();
+        IList<ShowUserViewModel> GetAllUsersForShow();
+        IList<ShowUserViewModel> GetPageOfUsers(int page, int count);
 
         ShowUserViewModel GetUserForShowByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult CreateUser(UserManager<ApplicationUser> UserManager, CreateUserViewModel model);

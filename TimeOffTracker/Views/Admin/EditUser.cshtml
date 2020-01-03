@@ -86,21 +86,8 @@
         </div>
     </div>
 
-    <script>
-        var checkbox = document.getElementById("IsChangePassword");
-        var div = document.getElementById("DivNewPassword");
-        function change() {
-            if (checkbox.checked === true) {
-                div.hidden = "";
-            }
-            if(checkbox.checked === false)
-            {
-                div.hidden = "hidden";
-            }
-            };
-    </script>
-
     <button type="submit" class="btn btn-primary">Edit account</button>
 
     @Html.ActionLink("Cancel", "AdminUsersPanel", null, new { @class = "btn btn-default" })
 }
+<script src="~/Scripts/Admin/EditUser.js"></script>

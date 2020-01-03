@@ -16,8 +16,7 @@ namespace TimeOffTracker.Controllers
     {
         IAdminBusiness _adminBusiness;
         IVacationControlBusiness _VCBusiness;
-        //public AdminController() { }
-        //public AdminController() : this(new IAdminBusiness(), new IVacationControlBusiness()) { }
+    
         public AdminController(IAdminBusiness adminDataModel, IVacationControlBusiness vacationControlDataModel)
         {
             _adminBusiness = adminDataModel;
@@ -27,22 +26,22 @@ namespace TimeOffTracker.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AdminUsersPanel()
         {
-            return View(_adminBusiness.GetAllUsersForShow());
+            return View();
         }
 
         [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public ActionResult GetPartOfUsers()
+        [HttpGet]
+        public ActionResult GetPartOfUsers(int? page, int? count)
         {
-            //var temp = _adminBusiness.GetAllUsersForShow();
-            //var onlyOne = new ListShowUserViewModel();
-            ////onlyOne.MenuItems.Add(temp.MenuItems[0]);
-            //onlyOne.MenuItems = new List<ShowUserViewModel>();
-            //onlyOne.MenuItems.Add(temp.MenuItems[0]);
-
-
-            //return PartialView(onlyOne);
-            return PartialView(_adminBusiness.GetAllUsersForShow());
+            if (page == null)
+            {
+                page = 1;
+            }
+            if (count == null)
+            {
+                count = 10;
+            }
+            return PartialView(_adminBusiness.GetPageOfUsers((int)page, (int)count));
         }
 
         [Authorize(Roles = "Admin")]

@@ -85,10 +85,6 @@ namespace TimeOffTracker.Models
         public string AllRoles { get; set; }
         public DateTime? LockoutTime { get; set; }
     }
-    public class ListShowUserViewModel
-    {
-        public IList<ShowUserViewModel> MenuItems { get; set; }
-    }
 
     public class EditUserVacationDaysViewModel
     {

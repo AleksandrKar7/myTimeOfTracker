@@ -1,24 +1,41 @@
 ﻿@using TimeOffTracker.Models;
 @using TimeOffTracker.Controllers;
 
-@*@Scripts.Render("~/scripts/jquery-1.10.2.js")*@
 @Scripts.Render("~/Scripts/jquery-3.3.1.js")
 @Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
-@model TimeOffTracker.Models.ListShowUserViewModel
 @{
     ViewBag.Title = "Admin users panel";
 }
+
 <link rel="stylesheet" href="~/Content/PanelTable.css">
 
 <div class="parent-admin-panel">
     <div class="child-admin-panel panel panel-primary">
-        @using (Ajax.BeginForm("GetPartOfUsers", new AjaxOptions { UpdateTargetId = "results" }))
-        {
-            <input type="submit" value="Поиск" />
-        }
+
         <div class="panel-heading">
             Accounts
         </div>
+        <table class="table table-striped">
+            <tr>
+                <th>Full name</th>
+                <th>Email</th>
+                <th>Employment date</th>
+                <th>Roles</th>
+                <th>@Html.ActionLink("Create", "CreateUser", "Admin", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })</th>
+            </tr>
+        </table>
         <div id="results"></div>
+
     </div>
 </div>
+<div class="btn-default">
+    @using (Ajax.BeginForm("GetPartOfUsers", new AjaxOptions { UpdateTargetId = "results", InsertionMode = InsertionMode.InsertAfter, HttpMethod="Get"}))
+    {
+        <input id="page" type="hidden" value="0" name="page" />
+        <input type="hidden" value="10" name="count" />
+
+        <input id="next" class="center-block" type="submit" value="Show more" />
+    }
+</div>
+
+<script src="~/Scripts/Admin/UsersPanel.js"></script>

@@ -1,32 +1,13 @@
-﻿@model TimeOffTracker.Models.ListShowUserViewModel
-@Scripts.Render("~/Scripts/jquery-3.3.1.js")
-@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
+﻿@using TimeOffTracker.Models;
+@using TimeOffTracker.Controllers;
+@model IList<ShowUserViewModel>
 
-<link rel="stylesheet" href="~/Content/PanelTable.css">
-<div id="partUser">
-    <table class="table table-striped">
-        <tr>
-            <th>Full name</th>
-            <th>Email</th>
-            <th>Employment date</th>
-            <th>Roles</th>
-            <th>@Html.ActionLink("Create", "CreateUser", "Admin", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })</th>
-            <th>
-                @using (Ajax.BeginForm("GetPartOfUsers", new AjaxOptions { UpdateTargetId = "results" }))
-                {
-                    <input type="submit" value="Поиск" />
-                }
-            </th>
-        </tr>
-        @if (Model.MenuItems.Count == 0)
-        {
-            <tr>
-                <td colspan="3" class="text-center">No account... Stop! Who are you?</td>
-            </tr>
-        }
-        else
-        {
-            foreach (var user in Model.MenuItems)
+@if (Model.Count != 0)
+{
+    <link rel="stylesheet" href="~/Content/PanelTable.css">
+    <div id="partUser">
+        <table class="table table-striped">
+            @foreach (var user in Model)
             {
                 if (user.LockoutTime == null)
                 {
@@ -71,6 +52,6 @@
                     </tr>
                 }
             }
-        }
-    </table>
-</div>
+        </table>
+    </div>
+}
