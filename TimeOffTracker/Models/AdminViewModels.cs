@@ -78,8 +78,9 @@ namespace TimeOffTracker.Models
         public string FullName { get; set; }
         [Display(Name = "Email")]
         public string Email { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "Employment date")]
-        public string EmploymentDate { get; set; }
+        public DateTime EmploymentDate { get; set; }
         [Display(Name = "Roles")]
         public string AllRoles { get; set; }
         public DateTime? LockoutTime { get; set; }

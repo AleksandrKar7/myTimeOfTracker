@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TimeOffTracker.Business;
+using TimeOffTracker.Data;
 
 namespace TimeOffTracker
 {
@@ -20,10 +21,11 @@ namespace TimeOffTracker
             builder.RegisterControllers(typeof(MvcApplication).Assembly);
 
             // регистрируем споставление типов
-            builder.RegisterType<AdminDataModel>().As<IAdminDataModel>();
-            builder.RegisterType<VacationControlDataModel>().As<IVacationControlDataModel>();
-            builder.RegisterType<ListActiveRequests>().As<IListActiveRequests>();
-            builder.RegisterType<VacationRequestDataModel>().As<IVacationRequestDataModel>();
+            builder.RegisterType<AdminBusiness>().As<IAdminBusiness>();
+            builder.RegisterType<VacationControlBusiness>().As<IVacationControlBusiness>();
+
+            builder.RegisterType<AdminData>().As<IAdminData>();
+            builder.RegisterType<VacationControlData>().As<IVacationControlData>();
 
             // создаем новый контейнер с теми зависимостями, которые определены выше
             var container = builder.Build();

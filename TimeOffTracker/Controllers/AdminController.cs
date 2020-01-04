@@ -14,29 +14,27 @@ namespace TimeOffTracker.Controllers
 {
     public class AdminController : Controller
     {
-        IAdminDataModel _adminDataModel;
-        IVacationControlDataModel _vacationControlDataModel;
+        IAdminBusiness _adminBusiness;
+        IVacationControlBusiness _VCBusiness;
 
-        public AdminController(IAdminDataModel adminDataModel, IVacationControlDataModel vacationControlDataModel)
+        public AdminController(IAdminBusiness adminDataModel, IVacationControlBusiness vacationControlDataModel)
         {
-            _adminDataModel = adminDataModel;
-            _vacationControlDataModel = vacationControlDataModel;
+            _adminBusiness = adminDataModel;
+            _VCBusiness = vacationControlDataModel;
         }
 
         [Authorize(Roles = "Admin")]
         public ActionResult AdminUsersPanel()
         {
-            return View(_adminDataModel.GetAllUsersForShow());
+            return View(_adminBusiness.GetAllUsersForShow());
         }
-
-
 
         [Authorize(Roles = "Admin")]
         public ActionResult CreateUser()
         {
             CreateUserViewModel model = new CreateUserViewModel
             {
-                AvailableRoles = _adminDataModel.GetSelectListItemRoles()
+                AvailableRoles = _adminBusiness.GetSelectListItemRoles()
             };
             return View(model);
         }
@@ -45,7 +43,7 @@ namespace TimeOffTracker.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult CreateUser(CreateUserViewModel model)
         {
-            model.AvailableRoles = _adminDataModel.GetSelectListItemRoles(model.SelectedRoles);
+            model.AvailableRoles = _adminBusiness.GetSelectListItemRoles(model.SelectedRoles);
 
             if (ModelState.IsValid)
             {
@@ -55,12 +53,11 @@ namespace TimeOffTracker.Controllers
                     return View(model);
                 }
 
-                IdentityResult result = _adminDataModel.CreateUser(UserManager, model);
+                IdentityResult result = _adminBusiness.CreateUser(UserManager, model);
 
                 if (result.Succeeded)
                 {
-                    _vacationControlDataModel.BindingMissingVacationByEmail(model.Email);
-                    _vacationControlDataModel.UpdateUserVacationDaysByEmail(model.Email);
+                    _VCBusiness.ControlUserVacationDays(model.Email);
 
                     return RedirectToAction("AdminUsersPanel");
                 }
@@ -72,14 +69,12 @@ namespace TimeOffTracker.Controllers
             return View(model);
         }
 
-
-
         [Authorize(Roles = "Admin")]
         public ActionResult ConfirmSwitchLockoutUser(string email)
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(email))
             {
-                return View(_adminDataModel.GetUserForShowByEmail(UserManager, email));
+                return View(_adminBusiness.GetUserForShowByEmail(UserManager, email));
             }
             return RedirectToAction("AdminUsersPanel");
         }
@@ -90,7 +85,7 @@ namespace TimeOffTracker.Controllers
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(email))
             {
-                _adminDataModel.SwitchLockoutUserByEmail(UserManager, email);
+                _adminBusiness.SwitchLockoutUserByEmail(UserManager, email);
             }
             else
             {
@@ -99,14 +94,12 @@ namespace TimeOffTracker.Controllers
             return RedirectToAction("AdminUsersPanel");
         }
 
-
-
         [Authorize(Roles = "Admin")]
         public ActionResult EditUser(string email)
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(email))
             {
-                return View(_adminDataModel.GetUserForEditByEmail(UserManager, email));
+                return View(_adminBusiness.GetUserForEditByEmail(UserManager, email));
             }
             return RedirectToAction("AdminUsersPanel");
         }
@@ -115,7 +108,7 @@ namespace TimeOffTracker.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditUser(EditUserViewModel model)
         {
-            model.AvailableRoles = _adminDataModel.GetSelectListItemRoles(model.SelectedRoles);
+            model.AvailableRoles = _adminBusiness.GetSelectListItemRoles(model.SelectedRoles);
 
             if (ModelState.IsValid)
             {
@@ -124,7 +117,7 @@ namespace TimeOffTracker.Controllers
                     ModelState.AddModelError("", "Employment date can't be longer than the current date");
                     return View(model);
                 }
-                IdentityResult result = _adminDataModel.EditUser(UserManager, model);
+                IdentityResult result = _adminBusiness.EditUser(UserManager, model);
 
                 if (result.Succeeded)
                 {
@@ -145,10 +138,9 @@ namespace TimeOffTracker.Controllers
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(email))
             {
-                _vacationControlDataModel.BindingMissingVacationByEmail(email);
-                _vacationControlDataModel.UpdateUserVacationDaysByEmail(email);
+                _VCBusiness.ControlUserVacationDays(email);
 
-                return View(_adminDataModel.GetUserForEditVacationDaysByEmail(UserManager, email));
+                return View(_adminBusiness.GetUserByEmailForEditVacationDays(UserManager, email));
             }
 
             return RedirectToAction("AdminUsersPanel");
@@ -158,10 +150,10 @@ namespace TimeOffTracker.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult EditUserVacationDays(EditUserVacationDaysViewModel model)
         {
-            model.Vacations = _adminDataModel.GetVacationDictionaryByEmail(model.Email);
+            model.Vacations = _adminBusiness.GetUserVacationDictionary(model.Email);
             if (ModelState.IsValid)
             {
-                string result = _adminDataModel.EditUserVacationDays(model);
+                string result = _adminBusiness.EditUserVacationDays(UserManager, model);
                 if (!string.IsNullOrWhiteSpace(result))
                 {
                     ModelState.AddModelError("", result);

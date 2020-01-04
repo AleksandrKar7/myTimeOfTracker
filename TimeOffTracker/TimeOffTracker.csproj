@@ -182,47 +182,30 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="AutofacConfig.cs" />
-    <Compile Include="Business\AdminDataModel.cs" />
-    <Compile Include="Business\IAdminDataModel.cs" />
-    <Compile Include="Business\IListActiveRequests.cs" />
+    <Compile Include="Business\AdminBusiness.cs" />
+    <Compile Include="Business\IAdminBusiness.cs" />
     <Compile Include="Business\IVacationControlDataModel.cs" />
-    <Compile Include="Business\IVacationRequestDataModel.cs" />
-    <Compile Include="Business\ListActiveRequests.cs" />
-    <Compile Include="Business\VacationControlDataModel.cs" />
-    <Compile Include="Business\VacationRequestDataModel.cs" />
+    <Compile Include="Business\VacationControlBusiness.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\VacationRequestController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\ManagerController.cs" />
+    <Compile Include="Data\AdminData.cs" />
+    <Compile Include="Data\IAdminData.cs" />
+    <Compile Include="Data\IVacationControlData.cs.cs" />
+    <Compile Include="Data\VacationControlData.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201903171925231_TimeOffTrackerDB.cs" />
-    <Compile Include="Migrations\201903171925231_TimeOffTrackerDB.Designer.cs">
-      <DependentUpon>201903171925231_TimeOffTrackerDB.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903212014464_TestExtendedDB.cs" />
-    <Compile Include="Migrations\201903212014464_TestExtendedDB.Designer.cs">
-      <DependentUpon>201903212014464_TestExtendedDB.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201903231816064_ExtendedDb.cs" />
-    <Compile Include="Migrations\201903231816064_ExtendedDb.Designer.cs">
-      <DependentUpon>201903231816064_ExtendedDb.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201904110506082_UpdateSchema.cs" />
-    <Compile Include="Migrations\201904110506082_UpdateSchema.Designer.cs">
-      <DependentUpon>201904110506082_UpdateSchema.cs</DependentUpon>
+    <Compile Include="Migrations\201912141425081_demo.cs" />
+    <Compile Include="Migrations\201912141425081_demo.Designer.cs">
+      <DependentUpon>201912141425081_demo.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
-    <Compile Include="Models\ManagerModels\ListRequestsModel.cs" />
-    <Compile Include="Models\ManagerModels\RequestsModel.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\VacationRequestViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -233,7 +216,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\manager-button-show.css" />
     <Content Include="Content\PanelTable.css" />
-    <Content Include="Content\Request.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -255,7 +237,6 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
-    <Content Include="Views\VacationRequest\VacationRequest.cshtml" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -286,8 +267,6 @@
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Manager\ManagerPanel.cshtml" />
-    <Content Include="Views\Manager\Details.cshtml" />
     <Content Include="Views\Admin\AdminUsersPanel.cshtml" />
     <Content Include="Views\Admin\ConfirmSwitchLockoutUser.cshtml" />
     <Content Include="Views\Admin\CreateUser.cshtml" />
@@ -297,8 +276,6 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\VacationRequest\UserHistoryPanel.cshtml" />
-    <Content Include="Views\Manager\History.cshtml" />
     <Content Include="Views\Home\NotLoggedIn.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -318,17 +295,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201903171925231_TimeOffTrackerDB.resx">
-      <DependentUpon>201903171925231_TimeOffTrackerDB.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903212014464_TestExtendedDB.resx">
-      <DependentUpon>201903212014464_TestExtendedDB.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201903231816064_ExtendedDb.resx">
-      <DependentUpon>201903231816064_ExtendedDb.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201904110506082_UpdateSchema.resx">
-      <DependentUpon>201904110506082_UpdateSchema.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201912141425081_demo.resx">
+      <DependentUpon>201912141425081_demo.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
