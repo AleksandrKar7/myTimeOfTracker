@@ -1,6 +1,6 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using Microsoft.AspNet.Identity.Owin;
+//using Microsoft.AspNet.Identity.Owin;
 using TimeOffTracker.Models;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
@@ -9,8 +9,9 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using System.Collections.Generic;
 using TimeOffTracker.Data;
+using TimeOffTracker.BLL;
 
-namespace TimeOffTracker.Business
+namespace TimeOffTracker.BLL
 {
     public class AdminBusiness : IAdminBusiness
     {
@@ -25,7 +26,7 @@ namespace TimeOffTracker.Business
             return _adminData.GetAllUsers();
         }
 
-        public ShowUserViewModel GetUserForShowByEmail(ApplicationUserManager userManager, string email)
+        public ShowUserViewModel GetUserForShowByEmail(UserManager<ApplicationUser> userManager, string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
@@ -45,7 +46,7 @@ namespace TimeOffTracker.Business
             };
         }
 
-        public IdentityResult CreateUser(ApplicationUserManager userManager, CreateUserViewModel model)
+        public IdentityResult CreateUser(UserManager<ApplicationUser> userManager, CreateUserViewModel model)
         {
             ApplicationUser user = new ApplicationUser
             {
@@ -58,12 +59,12 @@ namespace TimeOffTracker.Business
             return _adminData.CreateUser(userManager, user, model.Password, model.SelectedRoles);
         }
 
-        public void SwitchLockoutUserByEmail(ApplicationUserManager userManager, string email)
+        public void SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email)
         {
             _adminData.SwitchLockoutUserByEmail(userManager, email);
         }
 
-        public EditUserViewModel GetUserForEditByEmail(ApplicationUserManager userManager, string email)
+        public EditUserViewModel GetUserForEditByEmail(UserManager<ApplicationUser> userManager, string email)
         {
             var user = _adminData.GetUserByEmail(userManager, email);
             var roles = _adminData.GetUserRoles(userManager, user);
@@ -80,7 +81,7 @@ namespace TimeOffTracker.Business
             };
         }
 
-        public IdentityResult EditUser(ApplicationUserManager userManager, EditUserViewModel model)
+        public IdentityResult EditUser(UserManager<ApplicationUser> userManager, EditUserViewModel model)
         {
             IdentityResult result;
 
@@ -104,7 +105,7 @@ namespace TimeOffTracker.Business
                 , (String.IsNullOrWhiteSpace(model.IsChangePassword) ? model.NewPassword:null));
         }
 
-        public EditUserVacationDaysViewModel GetUserByEmailForEditVacationDays(ApplicationUserManager userManager, string email)
+        public EditUserVacationDaysViewModel GetUserByEmailForEditVacationDays(UserManager<ApplicationUser> userManager, string email)
         {
             ApplicationUser user = _adminData.GetUserByEmail(userManager, email);
             if (user == null)
@@ -126,7 +127,7 @@ namespace TimeOffTracker.Business
         }
 
         //Возвращает строку с пречнем ошибок
-        public string EditUserVacationDays(ApplicationUserManager userManager, EditUserVacationDaysViewModel model)
+        public string EditUserVacationDays(UserManager<ApplicationUser> userManager, EditUserVacationDaysViewModel model)
         {
             string result = "";
             if (!(model.VacationNames.Count == model.VacationDays.Count))

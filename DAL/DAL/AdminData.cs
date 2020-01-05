@@ -45,7 +45,7 @@ namespace TimeOffTracker.Data
             }
         }
 
-        public ApplicationUser GetUserByEmail(ApplicationUserManager userManager,string email)
+        public ApplicationUser GetUserByEmail(UserManager<ApplicationUser> userManager,string email)
         {
             return userManager.FindByEmail(email);
         }
@@ -58,13 +58,13 @@ namespace TimeOffTracker.Data
             }
         }
 
-        public IList<string> GetUserRoles(ApplicationUserManager userManager, string email)
+        public IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, string email)
         {
             //var user = userManager.FindByEmail(email);
             return userManager.GetRoles(GetUserByEmail(userManager, email).Id);
         }
 
-        public IList<string> GetUserRoles(ApplicationUserManager userManager, ApplicationUser user)
+        public IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, ApplicationUser user)
         {
             //var user = userManager.FindByEmail(email);
             return userManager.GetRoles(user.Id);
@@ -103,7 +103,7 @@ namespace TimeOffTracker.Data
             return result;
         }
 
-        //public ShowUserViewModel GetUserByEmail(ApplicationUserManager userManager, string email)
+        //public ShowUserViewModel GetUserByEmail(UserManager<ApplicationUser> userManager, string email)
         //{
         //    using (ApplicationDbContext context = new ApplicationDbContext())
         //    {
@@ -121,7 +121,7 @@ namespace TimeOffTracker.Data
         //    }
         //}
 
-        public IdentityResult CreateUser(ApplicationUserManager userManager, ApplicationUser user, string password, IList<string> roles)
+        public IdentityResult CreateUser(UserManager<ApplicationUser> userManager, ApplicationUser user, string password, IList<string> roles)
         {
             //ApplicationUser user = new ApplicationUser
             //{
@@ -147,7 +147,7 @@ namespace TimeOffTracker.Data
             return result;
         }
 
-        public void SwitchLockoutUserByEmail(ApplicationUserManager userManager, string email)
+        public void SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email)
         {
             //var user = userManager.FindByEmail(email);
             //user.LockoutEnabled = true;
@@ -166,7 +166,7 @@ namespace TimeOffTracker.Data
             }
         }
 
-        public IdentityResult EditUser(ApplicationUserManager userManager, ApplicationUser newUser, IList<string> newRoles, string newPassword)
+        public IdentityResult EditUser(UserManager<ApplicationUser> userManager, ApplicationUser newUser, IList<string> newRoles, string newPassword)
         {
             IdentityResult result;
             var rolesUser = GetUserRoles(userManager, newUser);
@@ -269,7 +269,7 @@ namespace TimeOffTracker.Data
         //    }
         //}
 
-        public string EditUserVacationDays(ApplicationUserManager userManager, ApplicationUser user
+        public string EditUserVacationDays(UserManager<ApplicationUser> userManager, ApplicationUser user
             ,IList<string> vacNames, IList<int> vacDays)
         {
             string result = "";

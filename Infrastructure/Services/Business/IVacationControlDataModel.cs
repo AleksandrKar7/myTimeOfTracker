@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeOffTracker.Models;
 
-namespace TimeOffTracker.Business
+namespace TimeOffTracker.BLL
 {
     public interface IVacationControlBusiness
     {

@@ -241,7 +241,6 @@ namespace TimeOffTracker.Data
                         }
                     }
                 }
-
                 return sumDays;
             }
         }

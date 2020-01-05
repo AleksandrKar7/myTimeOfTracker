@@ -1,11 +1,19 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeOffTracker", "TimeOffTracker\TimeOffTracker.csproj", "{32138D00-A864-4E0C-ADF0-9A606A4AF0A9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "TimeOffTracker\Web.csproj", "{32138D00-A864-4E0C-ADF0-9A606A4AF0A9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{68ABD796-F101-4A91-97A6-39D11B082F3D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{1A014AF6-E4F2-4CF1-975E-5075E718BD9F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{0581CBBA-9982-4E01-A68C-0BDD8AB5464F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ViewModels", "ViewModels\ViewModels.csproj", "{0C5E6C3E-EB2A-4B58-BA7B-1EE0FE2FD84B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{F3431CD7-74C1-413A-A6CB-B745E91EF396}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +30,22 @@ Global
 		{68ABD796-F101-4A91-97A6-39D11B082F3D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{68ABD796-F101-4A91-97A6-39D11B082F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{68ABD796-F101-4A91-97A6-39D11B082F3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A014AF6-E4F2-4CF1-975E-5075E718BD9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A014AF6-E4F2-4CF1-975E-5075E718BD9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A014AF6-E4F2-4CF1-975E-5075E718BD9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A014AF6-E4F2-4CF1-975E-5075E718BD9F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0581CBBA-9982-4E01-A68C-0BDD8AB5464F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0581CBBA-9982-4E01-A68C-0BDD8AB5464F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0581CBBA-9982-4E01-A68C-0BDD8AB5464F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0581CBBA-9982-4E01-A68C-0BDD8AB5464F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C5E6C3E-EB2A-4B58-BA7B-1EE0FE2FD84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C5E6C3E-EB2A-4B58-BA7B-1EE0FE2FD84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C5E6C3E-EB2A-4B58-BA7B-1EE0FE2FD84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C5E6C3E-EB2A-4B58-BA7B-1EE0FE2FD84B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3431CD7-74C1-413A-A6CB-B745E91EF396}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3431CD7-74C1-413A-A6CB-B745E91EF396}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3431CD7-74C1-413A-A6CB-B745E91EF396}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3431CD7-74C1-413A-A6CB-B745E91EF396}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

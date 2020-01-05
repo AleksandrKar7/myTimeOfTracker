@@ -5,7 +5,7 @@ using System.Web;
 using TimeOffTracker.Data;
 using TimeOffTracker.Models;
 
-namespace TimeOffTracker.Business
+namespace TimeOffTracker.BLL
 {
     public class VacationControlBusiness : IVacationControlBusiness
     {
