@@ -11,7 +11,7 @@
 
 <div class="parent-admin-panel">
     <div class="child-admin-panel panel panel-primary">
-
+        @*<div id="pagination"></div>*@
         <div class="panel-heading">
             Accounts
         </div>
@@ -25,17 +25,8 @@
             </tr>
         </table>
         <div id="results"></div>
-
+        <div id="pagination"></div>
     </div>
-</div>
-<div class="btn-default">
-    @using (Ajax.BeginForm("GetPartOfUsers", new AjaxOptions { UpdateTargetId = "results", InsertionMode = InsertionMode.InsertAfter, HttpMethod="Get"}))
-    {
-        <input id="page" type="hidden" value="0" name="page" />
-        <input type="hidden" value="10" name="count" />
-
-        <input id="next" class="center-block" type="submit" value="Show more" />
-    }
 </div>
 
 <script src="~/Scripts/Admin/UsersPanel.js"></script>

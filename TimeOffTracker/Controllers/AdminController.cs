@@ -39,9 +39,24 @@ namespace TimeOffTracker.Controllers
             }
             if (count == null)
             {
-                count = 10;
+                count = 5;
             }
             return PartialView(_adminBusiness.GetPageOfUsers((int)page, (int)count));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult Pagination(int? page, int? countUser)
+        {
+            if (page == null)
+            {
+                page = 1;
+            }
+            if (countUser == null)
+            {
+                countUser = 5;
+            }
+            return PartialView(new PagesInfo { CountUsersInPage = (int)countUser, CurrentPage = (int)page, TotalPages = _adminBusiness.GetTotalPages((int)countUser) });
         }
 
         [Authorize(Roles = "Admin")]

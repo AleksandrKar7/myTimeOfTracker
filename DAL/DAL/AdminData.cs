@@ -15,10 +15,7 @@ namespace TimeOffTracker.Data
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                //int count = context.Users.();
-
                 IList<ShowUserViewModel> allUsers = new List<ShowUserViewModel>();
-                //int i = context.Users.Count();
                 
                 var userList = (from user in context.Users                           
                                 orderby user.LockoutEndDateUtc
@@ -43,8 +40,6 @@ namespace TimeOffTracker.Data
                     AllRoles = string.Join(", ", p.RoleNames),
                     EmploymentDate = p.EmploymentDate
                 }).ToList();
-
-                //int i = allUsers.Count();
 
                 return allUsers;
             }
@@ -86,6 +81,19 @@ namespace TimeOffTracker.Data
                 {
                     result[j].AllRoles = string.Join(", ", userRoles[j].RoleNames);
                 }
+
+                return result;
+            }
+        }
+
+
+        public int GetTotalPages(int countInPage)
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                int result;
+                double totalUsers = context.Users.Count();
+                result = (int)Math.Ceiling(totalUsers / (double)countInPage);
 
                 return result;
             }
@@ -284,6 +292,5 @@ namespace TimeOffTracker.Data
                 return result;
             }
         }
-
     }
 }

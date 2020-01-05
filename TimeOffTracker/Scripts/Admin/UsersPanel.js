@@ -2,13 +2,8 @@
 $(document).ready(
     //Авто-загрузка первой страницы
     function () {
-    page = document.getElementById("page");
-    var pageNum = page.value;
-    if (pageNum == "0") {
         $("#results").load("GetPartOfUsers");
-        pageNum++;
-        page.value = pageNum;
-    }
+        $("#pagination").load("Pagination");
 
     //Скрипт для кнопки Show More
     document.body.onclick = function (e) {
@@ -22,3 +17,7 @@ $(document).ready(
         }
     }
 });
+
+function OnComplete(currentPage, TotalPage) {
+    $("#pagination").load("Pagination?page=" + currentPage + "&count=" + TotalPage);
+}

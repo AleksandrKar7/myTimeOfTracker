@@ -13,6 +13,7 @@ namespace TimeOffTracker.BLL
     {
         IList<ShowUserViewModel> GetAllUsersForShow();
         IList<ShowUserViewModel> GetPageOfUsers(int page, int count);
+        int GetTotalPages(int countInPage);
 
         ShowUserViewModel GetUserForShowByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult CreateUser(UserManager<ApplicationUser> UserManager, CreateUserViewModel model);

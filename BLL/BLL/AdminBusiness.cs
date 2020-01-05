@@ -30,6 +30,10 @@ namespace TimeOffTracker.BLL
             return _adminData.GetPageOfUsers(page, count);
         }
 
+        public int GetTotalPages(int countInPage)
+        {
+            return _adminData.GetTotalPages(countInPage);
+        }
 
         public ShowUserViewModel GetUserForShowByEmail(UserManager<ApplicationUser> userManager, string email)
         {

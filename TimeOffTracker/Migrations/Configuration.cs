@@ -56,7 +56,7 @@ namespace TimeOffTracker.Migrations
             // CreateTestRequest(context);
             // Создание пожилого рабочего (для проверки сжигания и панели пользователя)
             //CreateOld(context);
-            CreateGroupOfEmployee(context, 30);
+            CreateGroupOfEmployee(context, 50);
         }
 
         private void CreateGroupOfEmployee(ApplicationDbContext context, int count)

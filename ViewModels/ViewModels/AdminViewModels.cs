@@ -86,6 +86,13 @@ namespace TimeOffTracker.Models
         public DateTime? LockoutTime { get; set; }
     }
 
+    public class PagesInfo
+    {
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
+        public int CountUsersInPage { get; set; }
+    }
+
     public class EditUserVacationDaysViewModel
     {
         [Display(Name = "Full name")]
