@@ -90,7 +90,8 @@ namespace TimeOffTracker.Models
     {
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
-        public int CountUsersInPage { get; set; }
+        public int CurrentCountUsersInPage { get; set; }
+        public int[] CountUsers = new int[] { 5, 10, 20};
     }
 
     public class EditUserVacationDaysViewModel

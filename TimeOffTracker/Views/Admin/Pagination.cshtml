@@ -1,132 +1,246 @@
 ﻿@using TimeOffTracker.Models;
 @model PagesInfo
 
-    <div class="btn-default">
-        @using (Ajax.BeginForm("GetPartOfUsers"
-            , new AjaxOptions { UpdateTargetId = "results", InsertionMode = InsertionMode.InsertAfter, HttpMethod = "Get" 
-            , OnSuccess = "OnComplete(" + (Model.CurrentPage + 1).ToString() + ", " + Model.CountUsersInPage.ToString() + ")"}))
-        {
-            <input id="page" type="hidden" value=@((Model.CurrentPage + 1).ToString()) name="page" />
-            <input type="hidden" value=@((Model.CountUsersInPage).ToString()) name="count" />
 
-            <input id="next" class="center-block" type="submit" value="Show more" />
-        }
-    </div>
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        @*Кнопка назад*@
-        @if (Model.CurrentPage > 1)
-        {
-            <li class="page-item">
-                @Ajax.ActionLink("Previous", "GetPartOfUsers", new { page = (Model.CurrentPage - 1), count = Model.CountUsersInPage }
-            , new AjaxOptions
-            {
-                UpdateTargetId = "results",
-                InsertionMode = InsertionMode.Replace,
-                HttpMethod = "Get",
-                OnSuccess = "OnComplete(" + (Model.CurrentPage - 1).ToString() + ", " + Model.CountUsersInPage.ToString() + ")"
-            })
-            </li>
-        }
-        else
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Previous</a>
-            </li>
-        }
+@{
 
-        @*Возврат к первой странице и ...*@
-        @if (Model.CurrentPage > 3)
-        {
-            <li class="page-item">
-                @Ajax.ActionLink("1", "GetPartOfUsers", new { page = 1, count = Model.CountUsersInPage }
-           , new AjaxOptions
+    //int countPagesInPanel = 0;
+    double maxPages = 9;
+    int leftRange = Model.CurrentPage - (int)Math.Floor(maxPages / 2);
+    int rightRange = Model.CurrentPage + (int)Math.Floor(maxPages / 2);
+    int correctZero = 0;
+    bool left = false;
+    bool right = false;
+    //int pagesAroundCurrentPage = 2;
+}
+<table class="table">
+    <tr>
+        <td class="dropDownCUser" width="10%">
+            @*Размерность страницы*@
+            <div class="dropdown" @*style="align-content:center"style="margin-left:50px"*@>
+                <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
+                    @*Кол-во:*@ @Model.CurrentCountUsersInPage.ToString()
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu">
+                    @foreach (int i in Model.CountUsers)
+                    {
+                        if (i != Model.CurrentCountUsersInPage)
+                        {
+                            <li>
+                                @Ajax.ActionLink((i).ToString() + " записей", "GetPartOfUsers", new { page = Model.CurrentPage, count = i }
+                                                 , new AjaxOptions
+                                                 {
+                                                     UpdateTargetId = "results",
+                                                     InsertionMode = InsertionMode.Replace,
+                                                     HttpMethod = "Get",
+                                                     OnSuccess = "OnComplete(" + (Model.CurrentPage).ToString() + ", " + i.ToString() + ")"
+                                                 })
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </td>
+        <td class="showMoreBth">
+            @*Кнопка показать еще*@
+            <div>
+                @using (Ajax.BeginForm("GetPartOfUsers"
+                , new AjaxOptions
                 {
                     UpdateTargetId = "results",
-                    InsertionMode = InsertionMode.Replace,
+                    InsertionMode = InsertionMode.InsertAfter,
                     HttpMethod = "Get",
-                    OnSuccess = "OnComplete(" + (1).ToString() + ", " + Model.CountUsersInPage.ToString() + ")"
-                })
-            </li>
-            <li class="page-item disabled">
-                <a class="page-link" href="#">...</a>
-                @*@Ajax.ActionLink("...", "GetPartOfUsers", new AjaxOptions { UpdateTargetId = "results", InsertionMode = InsertionMode.Replace, HttpMethod = "Get" })*@
-            </li>
-        }
-
-        @*Теущая страница и две по бокам*@
-        @for (int i = Model.CurrentPage - 2; i <= Model.CurrentPage + 2; i++)
-        {
-            if (i >= 1 && i <= Model.TotalPages)
-            {
-                @*Текущая страница*@
-                if (i == Model.CurrentPage)
+                    OnSuccess = "OnComplete(" + (Model.CurrentPage + 1).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                }))
                 {
-                    <li class="page-item active">
-                        @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CountUsersInPage }
-                   , new AjaxOptions
+                    <input id="page" type="hidden" value=@((Model.CurrentPage + 1).ToString()) name="page" />
+                    <input type="hidden" value=@((Model.CurrentCountUsersInPage).ToString()) name="count" />
+
+                    <input id="next" class="btn-sm btn-info" type="submit" value="Show more" />
+                }
+            </div>
+        </td>
+        <td class="pagination">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    @*Кнопка назад*@
+                    @if (Model.CurrentPage > 1)
+                    {
+                        <li class="page-item paginationButton">
+                            @Ajax.ActionLink("<", "GetPartOfUsers", new { page = (Model.CurrentPage - 1), count = Model.CurrentCountUsersInPage }
+                 , new AjaxOptions
+                 {
+                     UpdateTargetId = "results",
+                     InsertionMode = InsertionMode.Replace,
+                     HttpMethod = "Get",
+                     OnSuccess = "OnComplete(" + (Model.CurrentPage - 1).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                 })
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item paginationButton disabled">
+                            <a class="page-link" href="#"><</a>
+                        </li>
+                    }
+
+                    @if (Model.TotalPages <= maxPages)
+                    {
+                        for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            @*Текущая страница*@
+                            if (i == Model.CurrentPage)
+                            {
+                                <li class="page-item active">
+
+                                    @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CurrentCountUsersInPage }
+                                , new AjaxOptions
+                                {
+                                    UpdateTargetId = "results",
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "Get",
+                                    OnSuccess = "OnComplete(" + (i).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                                }
+                                , new { @class = "paginationButton" })
+
+                                </li>
+                            }
+                            @*Страницы по бокам*@
+                            else
+                            {
+                                <li class="page-item" style="width:500px">
+
+                                    @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CurrentCountUsersInPage }
+                                , new AjaxOptions
+                                {
+                                    UpdateTargetId = "results",
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "Get",
+                                    OnSuccess = "OnComplete(" + (i).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                                }
+                                , new { @class = "paginationButton" })
+
+                                </li>
+                            }
+                        }
+                    }
+
+                    else
+                    {
+                        if (leftRange < 1)
+                        {
+                            correctZero = -(leftRange) + 1;
+                        }
+                        if (rightRange > Model.TotalPages)
+                        {
+                            correctZero = Model.TotalPages - rightRange;
+                        }
+                        if (leftRange + correctZero > 1)
+                        {
+                            leftRange += 2;
+                            left = true;
+                        }
+                        if (rightRange + correctZero < Model.TotalPages)
+                        {
+                            rightRange -= 2;
+                            right = true;
+                        }
+                        @*Возврат к первой странице и ...*@
+                        if (left == true)
+                        {
+                            <li class="page-item">
+                                @Ajax.ActionLink("1", "GetPartOfUsers", new { page = 1, count = Model.CurrentCountUsersInPage }
+                                , new AjaxOptions
+                                {
+                                    UpdateTargetId = "results",
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "Get",
+                                    OnSuccess = "OnComplete(" + (1).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                                }
+                                , new { @class = "paginationButton" })
+                            </li>
+                            <li class="page-item disabled">
+                                <a class="page-link paginationButton" href="#">...</a>
+                            </li>
+                        }
+                        @*Теущая страница и две по бокам*@
+                        for (int i = leftRange + correctZero; i <= rightRange + correctZero; i++)
+                        {
+                            @*Текущая страница*@
+                            if (i == Model.CurrentPage)
+                            {
+                                <li class="page-item active">
+                                    @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CurrentCountUsersInPage }
+                                    , new AjaxOptions
+                                    {
+                                        UpdateTargetId = "results",
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "Get",
+                                        OnSuccess = "OnComplete(" + (i).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                                    }
+                                    , new { @class = "paginationButton" })
+                                </li>
+                            }
+                            @*Страницы по бокам*@
+                            else
+                            {
+                                <li class="page-item" style="min-width:500px">
+                                    @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CurrentCountUsersInPage }
+                                    , new AjaxOptions
+                                    {
+                                        UpdateTargetId = "results",
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "Get",
+                                        OnSuccess = "OnComplete(" + (i).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                                    }
+                                    , new { @class = "paginationButton" })
+                                </li>
+
+                            }
+                        }
+
+                        @*... и последняя страница*@
+                        if (right == true)
+                        {
+                            <li class="page-item disabled">
+                                <a class="page-link paginationButton" href="#">...</a>
+                            </li>
+                            <li class="page-item paginationButton">
+                                @Ajax.ActionLink((Model.TotalPages).ToString(), "GetPartOfUsers", new { page = Model.TotalPages - 2, count = Model.CurrentCountUsersInPage }
+                                , new AjaxOptions
+                                {
+                                    UpdateTargetId = "results",
+                                    InsertionMode = InsertionMode.Replace,
+                                    HttpMethod = "Get",
+                                    OnSuccess = "OnComplete(" + (Model.TotalPages).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
+                                }
+                                , new { @class = "paginationButton" })
+                            </li>
+                        }
+                    }
+
+                    @if (Model.CurrentPage < Model.TotalPages)
+                    {
+                        <li class="page-item">
+                            @Ajax.ActionLink(">", "GetPartOfUsers", new { page = (Model.CurrentPage + 1), count = Model.CurrentCountUsersInPage }
+                        , new AjaxOptions
                         {
                             UpdateTargetId = "results",
                             InsertionMode = InsertionMode.Replace,
                             HttpMethod = "Get",
-                            OnSuccess = "OnComplete(" + (i).ToString() + ", " + Model.CountUsersInPage.ToString() + ")"
+                            OnSuccess = "OnComplete(" + (Model.CurrentPage + 1).ToString() + ", " + Model.CurrentCountUsersInPage.ToString() + ")"
                         })
-                    </li>
-                }
-                @*Страницы по бокам*@
-                else
-                {
-                    <li class="page-item">
-                        @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CountUsersInPage }
-                   , new AjaxOptions
-                        {
-                            UpdateTargetId = "results",
-                            InsertionMode = InsertionMode.Replace,
-                            HttpMethod = "Get",
-                            OnSuccess = "OnComplete(" + (i).ToString() + ", " + Model.CountUsersInPage.ToString() + ")"
-                        })
-                    </li>
-                }
-            }
-        }
-
-        @*... и последняя страница*@
-        @if (Model.CurrentPage < Model.TotalPages - 2)
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">...</a>
-                @*@Ajax.ActionLink("...", "GetPartOfUsers", new AjaxOptions { UpdateTargetId = "results", InsertionMode = InsertionMode.Replace, HttpMethod = "Get" })*@
-            </li>
-            <li class="page-item">
-                @Ajax.ActionLink((Model.TotalPages).ToString(), "GetPartOfUsers", new { page = Model.TotalPages - 2, count = Model.CountUsersInPage }
-           , new AjaxOptions
-                {
-                    UpdateTargetId = "results",
-                    InsertionMode = InsertionMode.Replace,
-                    HttpMethod = "Get",
-                    OnSuccess = "OnComplete(" + (Model.TotalPages).ToString() + ", " + Model.CountUsersInPage.ToString() + ")"
-                })
-            </li>
-        }
-
-        @if (Model.CurrentPage < Model.TotalPages)
-        {
-            <li class="page-item">
-                @Ajax.ActionLink("Next", "GetPartOfUsers", new { page = (Model.CurrentPage + 1), count = Model.CountUsersInPage }
-            , new AjaxOptions
-            {
-                UpdateTargetId = "results",
-                InsertionMode = InsertionMode.Replace,
-                HttpMethod = "Get",
-                OnSuccess = "OnComplete(" + (Model.CurrentPage + 1).ToString() + ", " + Model.CountUsersInPage.ToString() + ")"
-            })
-            </li>
-        }
-        else
-        {
-            <li class="page-item disabled">
-                <a class="page-link" href="#">Next</a>
-            </li>
-        }
-    </ul>
-</nav>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item paginationButton disabled">
+                            <a class="page-link" href="#">></a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </td>
+    </tr>
+</table>
