@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using TimeOffTracker.Models;
 
@@ -11,8 +12,9 @@ namespace TimeOffTracker.BLL
 {
     public interface IAdminBusiness
     {
-        ListShowUserViewModel GetAllUsersForShow();
-
+        TableContent GetAllUsersForShow();
+        TableContent GetPageOfUsers(int page, int count, SortInfo sort);
+        int GetTotalPages(int countInPage);
         ShowUserViewModel GetUserForShowByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult CreateUser(UserManager<ApplicationUser> UserManager, CreateUserViewModel model);
 

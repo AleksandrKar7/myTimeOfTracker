@@ -1,78 +1,41 @@
 ﻿@using TimeOffTracker.Models;
 @using TimeOffTracker.Controllers;
-@model ListShowUserViewModel
+@model SortInfo
+
+@Scripts.Render("~/Scripts/jquery-3.3.1.js")
+@Scripts.Render("~/scripts/jquery.unobtrusive-ajax.js")
 @{
     ViewBag.Title = "Admin users panel";
 }
-<link rel="stylesheet" href="~/Content/PanelTable.css">
 
-<div class="parent-admin-panel">
-    <div class="child-admin-panel panel panel-primary">
-        <div class="panel-heading">
-            Accounts
+<link rel="stylesheet" href="~/Content/PanelTable.css">
+<body 
+      onload="SetSortSatuses(
+     @(Model.FullNameAscending == null ? "null" : Model.FullNameAscending.ToString().ToLower())
+    ,@(Model.EmailAscending == null ? "null" : Model.EmailAscending.ToString().ToLower())
+    ,@(Model.EmploymentAscending == null ? "null" : Model.EmploymentAscending.ToString().ToLower())
+    ,@(Model.RolesAscending == null ? "null" : Model.RolesAscending.ToString().ToLower()))"
+      >
+    <div class="parent-admin-panel">
+        <div class="child-admin-panel panel panel-primary">
+            <div class="panel-heading">
+                Accounts
+            </div>
+            <table class="table table-striped">
+
+                <thead>
+                    <tr>
+                        <th class="fullNameColumn" onclick="ChangeSort(true, null, null, null)">Full name <nobr id="fullNameIcon"></nobr></th>
+                        <th class="emailColumn" onclick="ChangeSort(null, true, null, null)">Email <nobr id="emailIcon"></nobr></th>
+                        <th class="eDateColumn" onclick="ChangeSort(null, null, true, null)">Employment date <nobr id="eDateIcon"></nobr></th>
+                        <th class="rolesColumn" onclick="ChangeSort(null, null, null, true)">Roles <nobr id="rolesIcon"></nobr></th>
+                        <th class="buttonsColumn">@Html.ActionLink("Create", "CreateUser", "Admin", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })</th>
+                    </tr>
+                </thead>
+            </table>
+            <div id="results"></div>
+            <div id="pagination"></div>
         </div>
-        <table class="table table-striped">
-            <tr>
-                <th>Full name</th>
-                <th>Email</th>
-                <th>Employment date</th>
-                <th>Roles</th>
-                <th>@Html.ActionLink("Create", "CreateUser", "Admin", routeValues: null, htmlAttributes: new { @class = "btn btn-primary" })</th>
-            </tr>
-            @if (Model.MenuItems.Count == 0)
-            {
-                <tr>
-                    <td colspan="3" class="text-center">No account... Stop! Who are you?</td>
-                </tr>
-            }
-            else
-            {
-                foreach (var user in Model.MenuItems)
-                {
-                    if (user.LockoutTime == null)
-                    {
-                        <tr>
-                            <td>@user.FullName</td>
-                            <td>@user.Email</td>
-                            <td>@user.EmploymentDate</td>
-                            <td>@user.AllRoles</td>
-                            <td>
-                                @using (Html.BeginForm("ConfirmSwitchLockoutUser", "Admin", FormMethod.Get))
-                                {
-                                    <input type="hidden" value="@user.Email" name="email" />
-                                    <button class="btn btn-danger btn-xs" type="submit">Lock account</button>
-                                }
-                                @using (Html.BeginForm("EditUser", "Admin", FormMethod.Get))
-                                {
-                                    <input type="hidden" value="@user.Email" name="email" />
-                                    <button class="btn btn-default btn-xs" type="submit">Edit account</button>
-                                }
-                                @using (Html.BeginForm("EditUserVacationDays", "Admin", FormMethod.Get))
-                                {
-                                    <input type="hidden" value="@user.Email" name="email" />
-                                    <button class="btn btn-warning btn-xs" type="submit">Vacation control</button>
-                                }
-                            </td>
-                        </tr>
-                    }
-                    else
-                    {
-                        <tr class="danger">
-                            <td>@user.FullName</td>
-                            <td>@user.Email</td>
-                            <td>@user.EmploymentDate</td>
-                            <td>@user.AllRoles</td>
-                            <td>
-                                @using (Html.BeginForm("ConfirmSwitchLockoutUser", "Admin", FormMethod.Get))
-                                {
-                                    <input type="hidden" value="@user.Email" name="email" />
-                                    <button class="btn btn-success btn-xs" type="submit">Unlock account</button>
-                                }
-                            </td>
-                        </tr>
-                    }
-                }
-            }
-        </table>
     </div>
-</div>
+</body>
+<script src="~/Scripts/Admin/UsersPanel.js"></script>

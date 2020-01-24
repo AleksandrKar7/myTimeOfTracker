@@ -55,6 +55,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -85,11 +86,6 @@
     <Compile Include="Services\Business\IVacationControlDataModel.cs" />
     <Compile Include="Services\Data\IAdminData.cs" />
     <Compile Include="Services\Data\IVacationControlData.cs.cs" />
-    <Compile Include="Migrations\201912141425081_demo.cs" />
-    <Compile Include="Migrations\201912141425081_demo.Designer.cs">
-      <DependentUpon>201912141425081_demo.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -102,11 +98,6 @@
       <Project>{0c5e6c3e-eb2a-4b58-ba7b-1ee0fe2fd84b}</Project>
       <Name>ViewModels</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\201912141425081_demo.resx">
-      <DependentUpon>201912141425081_demo.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

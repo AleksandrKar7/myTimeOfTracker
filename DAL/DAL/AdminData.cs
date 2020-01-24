@@ -11,13 +11,13 @@ namespace TimeOffTracker.Data
 {
     public class AdminData : IAdminData
     {
-        public ListShowUserViewModel GetAllUsers()
+        public IList<ShowUserViewModel> GetAllUsers()
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
-                ListShowUserViewModel allUsers = new ListShowUserViewModel();
-
-                var userList = (from user in context.Users
+                IList<ShowUserViewModel> allUsers = new List<ShowUserViewModel>();
+                
+                var userList = (from user in context.Users                           
                                 orderby user.LockoutEndDateUtc
                                 select new
                                 {
@@ -32,7 +32,7 @@ namespace TimeOffTracker.Data
                                                  select role.Name).ToList()
                                 }).ToList();
 
-                allUsers.MenuItems = userList.Select(p => new ShowUserViewModel
+                allUsers = userList.Select(p => new ShowUserViewModel
                 {
                     FullName = p.FullName,
                     Email = p.Email,
@@ -42,6 +42,88 @@ namespace TimeOffTracker.Data
                 }).ToList();
 
                 return allUsers;
+            }
+        }
+
+        public IQueryable<ApplicationUser> GetSortedUsers(ApplicationDbContext context, int page, int count, SortInfo sort)
+        {
+            if(sort.FullNameAscending != null)
+            {
+                return (bool)sort.FullNameAscending
+                    ? context.Users.OrderBy((p => p.FullName)).Skip((page - 1) * count).Take(count)
+                    : context.Users.OrderByDescending(p => p.FullName).Skip((page - 1) * count).Take(count);
+            }
+            if(sort.EmailAscending != null)
+            {
+                return (bool)sort.EmailAscending 
+                    ? context.Users.OrderBy(p => p.Email).Skip((page - 1) * count).Take(count)
+                    : context.Users.OrderByDescending(p => p.Email).Skip((page - 1) * count).Take(count);
+            }
+            if(sort.EmploymentAscending != null)
+            {
+                return (bool)sort.EmploymentAscending
+                   ? context.Users.OrderBy(p => p.EmploymentDate).Skip((page - 1) * count).Take(count)
+                   : context.Users.OrderByDescending(p => p.EmploymentDate).Skip((page - 1) * count).Take(count);
+            }
+            if (sort.RolesAscending != null)
+            {
+                return (bool)sort.RolesAscending
+                   ? context.Users.OrderBy(p => p.Roles.Count).Skip((page - 1) * count).Take(count)
+                   : context.Users.OrderByDescending(p => p.Roles.Count).Skip((page - 1) * count).Take(count);
+            }
+            return context.Users.OrderBy(p => p.LockoutEndDateUtc).ThenBy(p => p.FullName)
+            .Skip((page - 1) * count).Take(count);
+        }
+
+        public IList<ShowUserViewModel> GetPageOfUsers(int page, int count, SortInfo sort)
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                if(page <= 0)
+                {
+                    return null;
+                }
+                IQueryable<ApplicationUser> users = GetSortedUsers(context, page, count, sort);
+
+                IList<ShowUserViewModel> result = new List<ShowUserViewModel>();
+
+                var userRoles = (from user in users
+                                select new
+                                {
+                                    RoleNames = (from userRole in user.Roles
+                                                 join role in context.Roles
+                                                 on userRole.RoleId
+                                                 equals role.Id
+                                                 select role.Name).ToList()
+                                }).ToList();
+
+                result = users.Select(p => new ShowUserViewModel
+                {
+                    FullName = p.FullName,
+                    Email = p.Email,
+                    LockoutTime = p.LockoutEndDateUtc,
+                    EmploymentDate = p.EmploymentDate
+                }).ToList();
+
+                for(int j = 0; j < userRoles.Count(); j++)
+                {
+                    result[j].AllRoles = string.Join(", ", userRoles[j].RoleNames);
+                }
+
+                return result;
+            }
+        }
+
+
+        public int GetTotalPages(int countInPage)
+        {
+            using (ApplicationDbContext context = new ApplicationDbContext())
+            {
+                int result;
+                double totalUsers = context.Users.Count();
+                result = (int)Math.Ceiling(totalUsers / (double)countInPage);
+
+                return result;
             }
         }
 
@@ -60,13 +142,11 @@ namespace TimeOffTracker.Data
 
         public IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, string email)
         {
-            //var user = userManager.FindByEmail(email);
             return userManager.GetRoles(GetUserByEmail(userManager, email).Id);
         }
 
         public IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, ApplicationUser user)
         {
-            //var user = userManager.FindByEmail(email);
             return userManager.GetRoles(user.Id);
         }
 
@@ -103,34 +183,8 @@ namespace TimeOffTracker.Data
             return result;
         }
 
-        //public ShowUserViewModel GetUserByEmail(UserManager<ApplicationUser> userManager, string email)
-        //{
-        //    using (ApplicationDbContext context = new ApplicationDbContext())
-        //    {
-        //        var user = userManager.FindByEmail(email);
-        //        var userRoles = userManager.GetRoles(user.Id);
-
-        //        return new ShowUserViewModel
-        //        {
-        //            FullName = user.FullName,
-        //            Email = user.Email,
-        //            LockoutTime = user.LockoutEndDateUtc,
-        //            AllRoles = string.Join(", ", userRoles),
-        //            EmploymentDate = user.EmploymentDate
-        //        };
-        //    }
-        //}
-
         public IdentityResult CreateUser(UserManager<ApplicationUser> userManager, ApplicationUser user, string password, IList<string> roles)
         {
-            //ApplicationUser user = new ApplicationUser
-            //{
-            //    UserName = model.Email,
-            //    Email = model.Email,
-            //    FullName = model.FullName,
-            //    EmploymentDate = model.EmploymentDate
-            //};
-
             IdentityResult result = userManager.Create(user, password);
 
             if (result.Succeeded)
@@ -149,11 +203,6 @@ namespace TimeOffTracker.Data
 
         public void SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email)
         {
-            //var user = userManager.FindByEmail(email);
-            //user.LockoutEnabled = true;
-
-            //userManager.SetLockoutEndDate(user.Id, time);
-
             var user = userManager.FindByEmail(email);
             user.LockoutEnabled = true;
             if (user.LockoutEndDateUtc == null || user.LockoutEndDateUtc == DateTimeOffset.MinValue)
@@ -202,72 +251,7 @@ namespace TimeOffTracker.Data
             }
 
             return result;
-
-            //IdentityResult result;
-
-            //ApplicationUser user = userManager.FindByEmail(model.OldEmail + "");
-            //if (user == null)
-            //{
-            //    return new IdentityResult("User is not exist");
-            //}
-
-            //var rolesUser = userManager.GetRoles(user.Id);
-
-            //if (rolesUser.Count() > 0)
-            //{
-            //    //Удалаем все старые роли перед обновлением
-            //    foreach (var item in rolesUser.ToList())
-            //    {
-            //        result = userManager.RemoveFromRole(user.Id, item);
-            //    }
-            //}
-
-            //user.Email = model.NewEmail;
-            //user.UserName = model.NewEmail;
-            //user.FullName = model.NewFullName;
-            //user.EmploymentDate = model.NewEmploymentDate;
-
-            //result = userManager.Update(user);
-
-            //if (result.Succeeded && model.SelectedRoles != null)
-            //{
-            //    foreach (string role in model.SelectedRoles)
-            //    {
-            //        if (model.SelectedRoles != null)
-            //        {
-            //            result = userManager.AddToRole(user.Id, role);
-            //        }
-            //    }
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(model.IsChangePassword))
-            //{
-            //    //добавляю "" т.к. ValidateAsync генерирует NullReferenceException при получении null
-            //    result = userManager.PasswordValidator.ValidateAsync(model.NewPassword + "").Result;
-            //    if (result.Succeeded)
-            //    {
-            //        string token = userManager.GeneratePasswordResetToken(user.Id);
-            //        userManager.ResetPassword(user.Id, token, model.NewPassword);
-            //    }
-            //}
-
-            //return result;
-
         }
-
-        //public Dictionary<string, int> GetVacationDictionaryByEmail(string email)
-        //{
-        //    using (ApplicationDbContext context = new ApplicationDbContext())
-        //    {
-        //        Dictionary<string, int> result = new Dictionary<string, int>();
-        //        var listUserVacation = context.UserVacationDays.Where(m => m.User.Email == email).ToList();
-        //        foreach (var item in listUserVacation)
-        //        {
-        //            result.Add(item.VacationType.Name, item.VacationDays);
-        //        }
-        //        return result;
-        //    }
-        //}
 
         public string EditUserVacationDays(UserManager<ApplicationUser> userManager, ApplicationUser user
             ,IList<string> vacNames, IList<int> vacDays)
@@ -276,12 +260,7 @@ namespace TimeOffTracker.Data
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
                 var listUserVacation = context.UserVacationDays.Where(m => m.User.Id == user.Id).ToList();
-                //Если кол-во видов вакансий не совпадает с кол-вом значений
-                //if (!(model.VacationNames.Count == model.VacationDays.Count))
-                //{
-                //    result = "Something went wrong! Please refresh and try again.";
-                //    return result;
-                //}
+
                 Dictionary<string, int> tempDict = new Dictionary<string, int>();
                 for (int i = 0; i < vacNames.Count; i++)
                 {
@@ -312,47 +291,6 @@ namespace TimeOffTracker.Data
                 context.SaveChanges();
             }
             return result;
-
-            //string result = "";
-            //using (ApplicationDbContext context = new ApplicationDbContext())
-            //{
-            //    var listUserVacation = context.UserVacationDays.Where(m => m.User.Email == model.Email).ToList();
-            //    //Если кол-во видов вакансий не совпадает с кол-вом значений
-            //    if (!(model.VacationNames.Count == model.VacationDays.Count))
-            //    {
-            //        result = "Something went wrong! Please refresh and try again.";
-            //        return result;
-            //    }
-            //    Dictionary<string, int> tempDic = new Dictionary<string, int>();
-            //    for (int i = 0; i < model.VacationNames.Count; i++)
-            //    {
-            //        tempDic.Add(model.VacationNames[i], model.VacationDays[i]);
-            //    }
-            //    foreach (var temp in tempDic)
-            //    {
-            //        foreach (var item in listUserVacation)
-            //        {
-            //            if (item.VacationType.Name == temp.Key)
-            //            {
-            //                if (temp.Value < 0)
-            //                {
-            //                    result += temp.Key + " can't be less than zero" + "\n";
-            //                }
-            //                else
-            //                {
-            //                    item.VacationDays = temp.Value;
-            //                    break;
-            //                }
-            //            }
-            //        }
-            //    }
-            //    if (string.IsNullOrWhiteSpace(result))
-            //    {
-            //        return result;
-            //    }
-            //    context.SaveChanges();
-            //}
-            //return result;
         }
 
         public Dictionary<string, int> GetUserVacationDictionary(ApplicationUser user)

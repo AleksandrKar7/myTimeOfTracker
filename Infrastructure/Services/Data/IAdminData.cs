@@ -11,13 +11,15 @@ namespace TimeOffTracker.Data
 {
     public interface IAdminData
     {  
-        ListShowUserViewModel GetAllUsers();
+        IList<ShowUserViewModel> GetAllUsers();
+        IList<ShowUserViewModel> GetPageOfUsers(int page, int count, SortInfo sort);
+        int GetTotalPages(int count);
         ApplicationUser GetUserByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult CreateUser(UserManager<ApplicationUser> userManager, ApplicationUser user, string password, IList<string> roles);
         void SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email);
         IList<SelectListItem> GetSelectListItemRoles(IList<string> roles);
         IList<IdentityRole> GetAllRoles();
-        IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, string email);
+        IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, string email);   
         IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, ApplicationUser user);
         IdentityResult EditUser(UserManager<ApplicationUser> userManager, ApplicationUser newUser, IList<string> newRoles, string newPassword);
         Dictionary<string, int> GetUserVacationDictionary(ApplicationUser user);

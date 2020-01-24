@@ -1,13 +1,10 @@
 ﻿.parent-panel
 {
-        /*display:flex;*/
     justify-content: center;
-
 }
 
 .child-panel
 {
-       /*flex:1;*/ 
     margin-left: auto;
     margin-right: auto;
 }
@@ -15,6 +12,7 @@
 .parent-admin-panel
 {
     display:flex;
+    min-width:655px;
 }
 
 .child-admin-panel
@@ -31,4 +29,47 @@
 .description
 {
     word-break:break-word;
+}
+
+.paginationButton {
+    min-width: 44px;
+    max-width: 44px;
+    text-align: center;
+}
+
+.showMoreBth {
+    text-align: center;
+}
+
+.dropDownCUser {
+    text-align: center;
+}
+
+.pagination {
+    text-align: right;
+    min-width: 500px;
+    margin:0px;
+    padding-right: 20px;
+}
+
+.paginationTable {
+    vertical-align: middle;
+}
+
+.fullNameColumn{
+    width: 25%;
+}
+.emailColumn {
+    width: 25%;
+}
+.eDateColumn {
+    width: 15%;
+}
+.rolesColumn {
+    width: auto;
+    max-width:100px;
+}
+.buttonsColumn{
+    max-width: 82px;
+    text-align:center;
 }

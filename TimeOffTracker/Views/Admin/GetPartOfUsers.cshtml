@@ -1,0 +1,57 @@
+﻿@using TimeOffTracker.Models;
+@model TableContent
+
+@if (Model != null && Model.Users.Count != 0)
+{
+    <link rel="stylesheet" href="~/Content/PanelTable.css">
+    <div id="partUser">
+        <table class="table table-striped">
+
+            @foreach (var user in Model.Users)
+            {
+                if (user.LockoutTime == null)
+                {
+                    <tr>
+                        <td class="fullNameColumn">@user.FullName</td>
+                        <td class="emailColumn">@user.Email</td>
+                        <td class="eDateColumn">@user.EmploymentDate.ToShortDateString()</td>
+                        <td class="rolesColumn">@user.AllRoles</td>
+                        <td class="buttonsColumn">
+                            @using (Html.BeginForm("ConfirmSwitchLockoutUser", "Admin", FormMethod.Get))
+                            {
+                                <input type="hidden" value="@user.Email" name="email" />
+                                <button class="btn btn-danger btn-xs" type="submit">Lock account</button>
+                            }
+                            @using (Html.BeginForm("EditUser", "Admin", FormMethod.Get))
+                            {
+                                <input type="hidden" value="@user.Email" name="email" />
+                                <button class="btn btn-default btn-xs" type="submit">Edit account</button>
+                            }
+                            @using (Html.BeginForm("EditUserVacationDays", "Admin", FormMethod.Get))
+                            {
+                                <input type="hidden" value="@user.Email" name="email" />
+                                <button class="btn btn-warning btn-xs" type="submit">Vacation control</button>
+                            }
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="danger">
+                        <td class="fullNameColumn">@user.FullName</td>
+                        <td class="emailColumn">@user.Email</td>
+                        <td class="eDateColumn">@user.EmploymentDate.ToShortDateString()</td>
+                        <td class="rolesColumn">@user.AllRoles</td>
+                        <td class="buttonsColumn">
+                            @using (Html.BeginForm("ConfirmSwitchLockoutUser", "Admin", FormMethod.Get))
+                            {
+                                <input type="hidden" value="@user.Email" name="email" />
+                                <button class="btn btn-success btn-xs" type="submit">Unlock account</button>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+}

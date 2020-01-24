@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System.Linq;
 using System.Collections.Generic;
 using TimeOffTracker.BLL;
+using System.Threading;
 
 namespace TimeOffTracker.Controllers
 {
@@ -16,8 +17,7 @@ namespace TimeOffTracker.Controllers
     {
         IAdminBusiness _adminBusiness;
         IVacationControlBusiness _VCBusiness;
-        //public AdminController() { }
-        //public AdminController() : this(new IAdminBusiness(), new IVacationControlBusiness()) { }
+
         public AdminController(IAdminBusiness adminDataModel, IVacationControlBusiness vacationControlDataModel)
         {
             _adminBusiness = adminDataModel;
@@ -27,7 +27,83 @@ namespace TimeOffTracker.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult AdminUsersPanel()
         {
-            return View(_adminBusiness.GetAllUsersForShow());
+            SortInfo sortInfo = GetSortInfo();
+            return View(sortInfo);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult GetPartOfUsers(int? page, int? count, SortInfo sort)
+        {
+            PagesInfo pi = GetPagesInfo(page, count);
+            SortInfo sortInfo = GetSortInfo();
+            return PartialView(_adminBusiness.GetPageOfUsers(pi.CurrentPage, pi.CurrentCountUsersInPage, sortInfo));
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public ActionResult Pagination(int? page, int? count)
+        {
+            return PartialView(GetPagesInfo(page, count));
+        }
+        public PagesInfo GetPagesInfo(int? page, int? count)
+        {
+            if (page == null)
+            {
+                if (HttpContext.Session["page"] != null)
+                {
+                    page = (int)HttpContext.Session["page"];
+                }
+                else
+                {
+                    page = 1;
+                }
+            }
+            if (count == null)
+            {
+                if (HttpContext.Session["count"] != null)
+                {
+                    count = (int)HttpContext.Session["count"];
+                }
+                else
+                {
+                    count = new PagesInfo().CountUsers[0];
+                }
+            }
+
+            int totalPages = _adminBusiness.GetTotalPages((int)count);
+            if (totalPages < page)
+            {
+                page = totalPages;
+            }
+
+            HttpContext.Session.Add("page", page);
+            HttpContext.Session.Add("count", count);
+
+            return new PagesInfo { CurrentPage = (int)page, CurrentCountUsersInPage = (int)count, TotalPages = totalPages };
+        }
+
+        public void UpdateSortInfo(bool? fullName, bool? email, bool? eDate, bool? roles)
+        {
+            HttpContext.Session.Add("FullNameAscending", fullName);
+            HttpContext.Session.Add("EmailAscending", email);
+            HttpContext.Session.Add("EmploymentAscending", eDate);
+            HttpContext.Session.Add("RolesAscending", roles);
+        }
+
+        public bool GetTrue()
+        {
+            return true;
+        }
+        public SortInfo GetSortInfo()
+        {
+            return new SortInfo
+            {
+                FullNameAscending = (bool?)HttpContext.Session["FullNameAscending"],
+                EmailAscending = (bool?)HttpContext.Session["EmailAscending"],
+                EmploymentAscending = (bool?)HttpContext.Session["EmploymentAscending"],
+                RolesAscending = (bool?)HttpContext.Session["RolesAscending"]
+            };
         }
 
         [Authorize(Roles = "Admin")]

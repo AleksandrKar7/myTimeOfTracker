@@ -1,6 +1,5 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-//using Microsoft.AspNet.Identity.Owin;
 using TimeOffTracker.Models;
 using Microsoft.AspNet.Identity;
 using System.Threading.Tasks;
@@ -21,9 +20,20 @@ namespace TimeOffTracker.BLL
         {
             _adminData = adminData;
         }
-        public ListShowUserViewModel GetAllUsersForShow()
+
+        public TableContent GetAllUsersForShow()
         {
-            return _adminData.GetAllUsers();
+            return new TableContent { Users = _adminData.GetAllUsers() };
+        }
+
+        public TableContent GetPageOfUsers(int page, int count, SortInfo sort)
+        {
+            return new TableContent {Users = _adminData.GetPageOfUsers(page, count, sort) };
+        }
+
+        public int GetTotalPages(int countInPage)
+        {
+            return _adminData.GetTotalPages(countInPage);
         }
 
         public ShowUserViewModel GetUserForShowByEmail(UserManager<ApplicationUser> userManager, string email)
