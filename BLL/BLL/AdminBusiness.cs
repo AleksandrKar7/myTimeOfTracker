@@ -20,14 +20,15 @@ namespace TimeOffTracker.BLL
         {
             _adminData = adminData;
         }
-        public IList<ShowUserViewModel> GetAllUsersForShow()
+
+        public TableContent GetAllUsersForShow()
         {
-            return _adminData.GetAllUsers();
+            return new TableContent { Users = _adminData.GetAllUsers() };
         }
 
-        public IList<ShowUserViewModel> GetPageOfUsers(int page, int count)
+        public TableContent GetPageOfUsers(int page, int count, SortInfo sort)
         {
-            return _adminData.GetPageOfUsers(page, count);
+            return new TableContent {Users = _adminData.GetPageOfUsers(page, count, sort) };
         }
 
         public int GetTotalPages(int countInPage)

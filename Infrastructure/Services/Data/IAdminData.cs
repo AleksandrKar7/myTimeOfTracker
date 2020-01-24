@@ -12,7 +12,7 @@ namespace TimeOffTracker.Data
     public interface IAdminData
     {  
         IList<ShowUserViewModel> GetAllUsers();
-        IList<ShowUserViewModel> GetPageOfUsers(int page, int count);
+        IList<ShowUserViewModel> GetPageOfUsers(int page, int count, SortInfo sort);
         int GetTotalPages(int count);
         ApplicationUser GetUserByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult CreateUser(UserManager<ApplicationUser> userManager, ApplicationUser user, string password, IList<string> roles);

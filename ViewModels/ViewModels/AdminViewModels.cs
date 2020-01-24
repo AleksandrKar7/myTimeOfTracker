@@ -86,6 +86,20 @@ namespace TimeOffTracker.Models
         public DateTime? LockoutTime { get; set; }
     }
 
+    public class SortInfo 
+    {
+        public bool? FullNameAscending { get; set; }
+        public bool? EmailAscending { get; set; }
+        public bool? RolesAscending { get; set; }
+        public bool? EmploymentAscending { get; set; }
+    }
+
+    public class TableContent
+    {
+        public IList<ShowUserViewModel> Users { get; set; }
+        public SortInfo SortInfo { get; set; }
+    }
+
     public class PagesInfo
     {
         public int CurrentPage { get; set; }
@@ -104,7 +118,6 @@ namespace TimeOffTracker.Models
         public string EmploymentDate { get; set; }
         [Display(Name = "Roles")]
         public string AllRoles { get; set; }
-
         public Dictionary<string, int> Vacations { get; set; }
         public List<string> VacationNames { get; set; }
         public List<int> VacationDays { get; set; }

@@ -1,7 +1,7 @@
 ﻿@using TimeOffTracker.Models;
 @model PagesInfo
 
-
+    <link rel="stylesheet" href="~/Content/PanelTable.css">
 @{
 
     //int countPagesInPanel = 0;
@@ -13,13 +13,13 @@
     bool right = false;
     //int pagesAroundCurrentPage = 2;
 }
-<table class="table">
-    <tr>
+<table class="table" >
+    <tr class="paginationTable">
         <td class="dropDownCUser" width="10%">
             @*Размерность страницы*@
-            <div class="dropdown" @*style="align-content:center"style="margin-left:50px"*@>
+            <div class="dropdown">
                 <button class="btn dropdown-toggle" type="button" data-toggle="dropdown">
-                    @*Кол-во:*@ @Model.CurrentCountUsersInPage.ToString()
+                    @Model.CurrentCountUsersInPage.ToString()
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
@@ -109,7 +109,7 @@
                             @*Страницы по бокам*@
                             else
                             {
-                                <li class="page-item" style="width:500px">
+                                <li class="page-item">
 
                                     @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CurrentCountUsersInPage }
                                 , new AjaxOptions
@@ -185,7 +185,7 @@
                             @*Страницы по бокам*@
                             else
                             {
-                                <li class="page-item" style="min-width:500px">
+                                <li class="page-item">
                                     @Ajax.ActionLink((i).ToString(), "GetPartOfUsers", new { page = i, count = Model.CurrentCountUsersInPage }
                                     , new AjaxOptions
                                     {
@@ -207,7 +207,7 @@
                                 <a class="page-link paginationButton" href="#">...</a>
                             </li>
                             <li class="page-item paginationButton">
-                                @Ajax.ActionLink((Model.TotalPages).ToString(), "GetPartOfUsers", new { page = Model.TotalPages - 2, count = Model.CurrentCountUsersInPage }
+                                @Ajax.ActionLink((Model.TotalPages).ToString(), "GetPartOfUsers", new { page = Model.TotalPages, count = Model.CurrentCountUsersInPage }
                                 , new AjaxOptions
                                 {
                                     UpdateTargetId = "results",

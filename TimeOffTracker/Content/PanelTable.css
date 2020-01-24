@@ -1,13 +1,10 @@
 ﻿.parent-panel
 {
-        /*display:flex;*/
     justify-content: center;
-
 }
 
 .child-panel
 {
-       /*flex:1;*/ 
     margin-left: auto;
     margin-right: auto;
 }
@@ -42,16 +39,37 @@
 
 .showMoreBth {
     text-align: center;
-    vertical-align: middle;
 }
 
 .dropDownCUser {
     text-align: center;
-    vertical-align: middle;
 }
 
 .pagination {
     text-align: right;
-    width: 500px;
+    min-width: 500px;
+    margin:0px;
     padding-right: 20px;
+}
+
+.paginationTable {
+    vertical-align: middle;
+}
+
+.fullNameColumn{
+    width: 25%;
+}
+.emailColumn {
+    width: 25%;
+}
+.eDateColumn {
+    width: 15%;
+}
+.rolesColumn {
+    width: auto;
+    max-width:100px;
+}
+.buttonsColumn{
+    max-width: 82px;
+    text-align:center;
 }

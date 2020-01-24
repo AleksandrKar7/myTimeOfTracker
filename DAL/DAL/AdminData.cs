@@ -45,8 +45,37 @@ namespace TimeOffTracker.Data
             }
         }
 
+        public IQueryable<ApplicationUser> GetSortedUsers(ApplicationDbContext context, int page, int count, SortInfo sort)
+        {
+            if(sort.FullNameAscending != null)
+            {
+                return (bool)sort.FullNameAscending
+                    ? context.Users.OrderBy((p => p.FullName)).Skip((page - 1) * count).Take(count)
+                    : context.Users.OrderByDescending(p => p.FullName).Skip((page - 1) * count).Take(count);
+            }
+            if(sort.EmailAscending != null)
+            {
+                return (bool)sort.EmailAscending 
+                    ? context.Users.OrderBy(p => p.Email).Skip((page - 1) * count).Take(count)
+                    : context.Users.OrderByDescending(p => p.Email).Skip((page - 1) * count).Take(count);
+            }
+            if(sort.EmploymentAscending != null)
+            {
+                return (bool)sort.EmploymentAscending
+                   ? context.Users.OrderBy(p => p.EmploymentDate).Skip((page - 1) * count).Take(count)
+                   : context.Users.OrderByDescending(p => p.EmploymentDate).Skip((page - 1) * count).Take(count);
+            }
+            if (sort.RolesAscending != null)
+            {
+                return (bool)sort.RolesAscending
+                   ? context.Users.OrderBy(p => p.Roles.Count).Skip((page - 1) * count).Take(count)
+                   : context.Users.OrderByDescending(p => p.Roles.Count).Skip((page - 1) * count).Take(count);
+            }
+            return context.Users.OrderBy(p => p.LockoutEndDateUtc).ThenBy(p => p.FullName)
+            .Skip((page - 1) * count).Take(count);
+        }
 
-        public IList<ShowUserViewModel> GetPageOfUsers(int page, int count)
+        public IList<ShowUserViewModel> GetPageOfUsers(int page, int count, SortInfo sort)
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
             {
@@ -54,8 +83,7 @@ namespace TimeOffTracker.Data
                 {
                     return null;
                 }
-                var users = context.Users.OrderBy(p => p.LockoutEndDateUtc).ThenBy(p => p.FullName)
-                    .Skip((page-1)*count).Take(count);
+                IQueryable<ApplicationUser> users = GetSortedUsers(context, page, count, sort);
 
                 IList<ShowUserViewModel> result = new List<ShowUserViewModel>();
 
