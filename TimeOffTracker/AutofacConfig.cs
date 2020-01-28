@@ -1,5 +1,8 @@
 ﻿using Autofac;
 using Autofac.Integration.Mvc;
+using DAL.DAL;
+using Infrastructure.Services;
+using Infrastructure.Services.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +29,9 @@ namespace TimeOffTracker
 
             builder.RegisterType<AdminData>().As<IAdminData>();
             builder.RegisterType<VacationControlData>().As<IVacationControlData>();
+
+            builder.RegisterType<NotifierBusiness>().As<INotifierBusiness>();
+            builder.RegisterType<NotifierData>().As<INotifierData>();
 
             // создаем новый контейнер с теми зависимостями, которые определены выше
             var container = builder.Build();

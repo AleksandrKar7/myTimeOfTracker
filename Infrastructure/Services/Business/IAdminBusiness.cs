@@ -18,7 +18,7 @@ namespace TimeOffTracker.BLL
         ShowUserViewModel GetUserForShowByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult CreateUser(UserManager<ApplicationUser> UserManager, CreateUserViewModel model);
 
-        void SwitchLockoutUserByEmail(UserManager<ApplicationUser> UserManager, string email);
+        bool SwitchLockoutUserByEmail(UserManager<ApplicationUser> UserManager, string email);
 
         EditUserViewModel GetUserForEditByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult EditUser(UserManager<ApplicationUser> UserManager, EditUserViewModel model);

@@ -10,6 +10,9 @@ using System.Linq;
 using System.Collections.Generic;
 using TimeOffTracker.BLL;
 using System.Threading;
+using Telegram.Bot;
+using TelegramBotApp.Models;
+using Infrastructure.Services;
 
 namespace TimeOffTracker.Controllers
 {
@@ -17,11 +20,15 @@ namespace TimeOffTracker.Controllers
     {
         IAdminBusiness _adminBusiness;
         IVacationControlBusiness _VCBusiness;
+        INotifierBusiness _notifier;
 
-        public AdminController(IAdminBusiness adminDataModel, IVacationControlBusiness vacationControlDataModel)
+        public AdminController(IAdminBusiness adminDataModel
+            , IVacationControlBusiness vacationControlDataModel
+            , INotifierBusiness notifier)
         {
             _adminBusiness = adminDataModel;
             _VCBusiness = vacationControlDataModel;
+            _notifier = notifier;
         }
 
         [Authorize(Roles = "Admin")]
@@ -37,6 +44,7 @@ namespace TimeOffTracker.Controllers
         {
             PagesInfo pi = GetPagesInfo(page, count);
             SortInfo sortInfo = GetSortInfo();
+
             return PartialView(_adminBusiness.GetPageOfUsers(pi.CurrentPage, pi.CurrentCountUsersInPage, sortInfo));
         }
 
@@ -91,10 +99,6 @@ namespace TimeOffTracker.Controllers
             HttpContext.Session.Add("RolesAscending", roles);
         }
 
-        public bool GetTrue()
-        {
-            return true;
-        }
         public SortInfo GetSortInfo()
         {
             return new SortInfo
@@ -135,6 +139,12 @@ namespace TimeOffTracker.Controllers
                 if (result.Succeeded)
                 {
                     _VCBusiness.ControlUserVacationDays(model.Email);
+                    //Уведомление администратора
+                    string message = "Вы добавили нового пользователя:" + "\n"
+                        + "ФИО: " + model.FullName + "\n"
+                        + "Email: " + model.Email + "\n"
+                        + "Employment date: " + model.EmploymentDate.ToShortDateString();
+                    _notifier.SendTelegramMessage(Bot.Get().Result, User.Identity.GetUserId(), message);
 
                     return RedirectToAction("AdminUsersPanel");
                 }
@@ -162,7 +172,12 @@ namespace TimeOffTracker.Controllers
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(email))
             {
-                _adminBusiness.SwitchLockoutUserByEmail(UserManager, email);
+                string message;
+                message = _adminBusiness.SwitchLockoutUserByEmail(UserManager, email)
+                    ? "Вы заблокировали пользователя " + email
+                    : "Вы сняли блокировку с пользователя " + email;
+                //Уведомление администратора
+                _notifier.SendTelegramMessage(Bot.Get().Result, User.Identity.GetUserId(), message);
             }
             else
             {
@@ -197,7 +212,15 @@ namespace TimeOffTracker.Controllers
                 IdentityResult result = _adminBusiness.EditUser(UserManager, model);
 
                 if (result.Succeeded)
-                {
+                {                  
+                    string message = "Вы отредактировали информацию о пользователе:" + "\n"
+                        + (model.OldFullName != model.NewFullName ? (model.OldFullName + " => " + model.NewFullName + ";\n") : null)
+                        + (model.OldEmail != model.NewEmail ? (model.OldEmail + " => " + model.NewEmail + ";\n") : null)
+                        + (model.OldEmploymentDate != model.NewEmploymentDate.ToShortDateString() ? (model.OldEmploymentDate + " => " + model.NewEmploymentDate.ToShortDateString() + ";\n") : null)
+                        + (model.OldRoles != string.Join(", ", model.SelectedRoles) ? (model.OldRoles + " => " + string.Join(", ", model.SelectedRoles) + ";\n") : null);
+                    //Уведомление администратора
+                    _notifier.SendTelegramMessage(Bot.Get().Result, User.Identity.GetUserId(), message);
+
                     return RedirectToAction("AdminUsersPanel");
                 }
                 else
@@ -236,6 +259,20 @@ namespace TimeOffTracker.Controllers
                     ModelState.AddModelError("", result);
                     return View(model);
                 }
+                string message = "Вы изменили кол-во дней отпуска для " + model.FullName + ":\n";
+
+                int value;
+                for (int i = 0; i < model.Vacations.Count; i++)
+                {
+                    value = model.Vacations.Where(x => x.Key == model.VacationNames[i]).First().Value;
+                    if (value != model.VacationDays[i])
+                    {
+                        message += model.VacationNames[i] + ": " + value + " => " + model.VacationDays[i] + ";\n";
+                    }
+                }
+                //Уведомление администратора
+                _notifier.SendTelegramMessage(Bot.Get().Result, User.Identity.GetUserId(), message);
+
                 return RedirectToAction("AdminUsersPanel");
             }
 

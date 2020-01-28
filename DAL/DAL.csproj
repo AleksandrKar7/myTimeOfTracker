@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DAL\AdminData.cs" />
+    <Compile Include="DAL\NotifierData.cs" />
     <Compile Include="DAL\VacationControlData.cs" />
   </ItemGroup>
   <ItemGroup>

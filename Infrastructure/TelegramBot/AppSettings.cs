@@ -7,7 +7,7 @@ namespace TelegramBotApp.Models
 {
     public static class AppSettings
     {
-        public static string Url { get; set; }  = "https://64ca0baf.ngrok.io/{0}";
+        public static string Url { get; set; }  = "https://12833014.ngrok.io/{0}";
 
         public static string Name { get; set; } = "@myTOTbot";
 

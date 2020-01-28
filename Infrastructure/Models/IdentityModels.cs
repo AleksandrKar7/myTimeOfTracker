@@ -21,11 +21,30 @@ namespace TimeOffTracker.Models
         [Column(TypeName = "date")]
         public DateTime EmploymentDate { get; set; }
 
+        public Notification Profile { get; set; }
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             return userIdentity;
         }
+    }
+
+    public class Notification
+    {
+        [Key]
+        [ForeignKey("User")]
+        public string Id { get; set; }
+        //[Key]
+        //virtual public ApplicationUser Id { get; set; }
+
+        [DisplayName("Телеграм чат Id")]
+        public int TelegramChatID { get; set; }
+
+        [DisplayName("Телеграм чат Id")]
+        public bool NotifyByTelegram { get; set; }
+
+        public ApplicationUser User { get; set; }
     }
 
     public class Requests
@@ -155,6 +174,7 @@ namespace TimeOffTracker.Models
         public DbSet<UserVacationDays> UserVacationDays { get; set; }
         public DbSet<RequestStatuses> RequestStatuses { get; set; }
         public DbSet<RequestChecks> RequestChecks { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         public static ApplicationDbContext Create()
         {

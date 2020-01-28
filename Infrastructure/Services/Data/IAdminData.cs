@@ -16,7 +16,7 @@ namespace TimeOffTracker.Data
         int GetTotalPages(int count);
         ApplicationUser GetUserByEmail(UserManager<ApplicationUser> UserManager, string email);
         IdentityResult CreateUser(UserManager<ApplicationUser> userManager, ApplicationUser user, string password, IList<string> roles);
-        void SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email);
+        bool SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email);
         IList<SelectListItem> GetSelectListItemRoles(IList<string> roles);
         IList<IdentityRole> GetAllRoles();
         IList<string> GetUserRoles(UserManager<ApplicationUser> userManager, string email);   

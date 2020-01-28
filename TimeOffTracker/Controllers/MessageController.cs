@@ -13,13 +13,14 @@ namespace Web.Controllers
 {
     public class MessageController : ApiController
     {
+        //Принимает команды для бота
         [Route(@"api/message/update")] //webhook uri part
         public async Task<OkResult> Update([FromBody]Update update)
         {
             var commands = Bot.Commands;
             var message = update.Message;
             var client = await Bot.Get();
-            //Console.WriteLine(client.BotId.ToString());
+           
             foreach (var command in commands)
             {
                 if (command.Contains(message.Text))

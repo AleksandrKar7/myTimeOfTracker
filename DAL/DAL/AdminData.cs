@@ -11,6 +11,7 @@ namespace TimeOffTracker.Data
 {
     public class AdminData : IAdminData
     {
+        //Возвращает список всех пользователей
         public IList<ShowUserViewModel> GetAllUsers()
         {
             using (ApplicationDbContext context = new ApplicationDbContext())
@@ -45,6 +46,7 @@ namespace TimeOffTracker.Data
             }
         }
 
+        //Возвращает отсортированный набор ApplicationUser
         public IQueryable<ApplicationUser> GetSortedUsers(ApplicationDbContext context, int page, int count, SortInfo sort)
         {
             if(sort.FullNameAscending != null)
@@ -201,17 +203,19 @@ namespace TimeOffTracker.Data
             return result;
         }
 
-        public void SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email)
+        public bool SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email)
         {
             var user = userManager.FindByEmail(email);
             user.LockoutEnabled = true;
             if (user.LockoutEndDateUtc == null || user.LockoutEndDateUtc == DateTimeOffset.MinValue)
             {
                 userManager.SetLockoutEndDate(user.Id, DateTime.Now.AddYears(1000));
+                return true;
             }
             else
             {
                 userManager.SetLockoutEndDate(user.Id, DateTimeOffset.MinValue);
+                return false;
             }
         }
 

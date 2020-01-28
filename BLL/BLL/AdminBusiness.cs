@@ -69,9 +69,9 @@ namespace TimeOffTracker.BLL
             return _adminData.CreateUser(userManager, user, model.Password, model.SelectedRoles);
         }
 
-        public void SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email)
+        public bool SwitchLockoutUserByEmail(UserManager<ApplicationUser> userManager, string email)
         {
-            _adminData.SwitchLockoutUserByEmail(userManager, email);
+           return _adminData.SwitchLockoutUserByEmail(userManager, email);
         }
 
         public EditUserViewModel GetUserForEditByEmail(UserManager<ApplicationUser> userManager, string email)

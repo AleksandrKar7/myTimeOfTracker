@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
@@ -51,6 +53,9 @@
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -80,14 +85,23 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="Telegram.Bot, Version=15.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Telegram.Bot.15.2.1\lib\net45\Telegram.Bot.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Services\Business\IAdminBusiness.cs" />
     <Compile Include="Services\Business\IVacationControlDataModel.cs" />
     <Compile Include="Services\Data\IAdminData.cs" />
+    <Compile Include="Services\Data\INotifierData.cs" />
     <Compile Include="Services\Data\IVacationControlData.cs.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\Business\INotifierBusiness.cs" />
+    <Compile Include="TelegramBot\AppSettings.cs" />
+    <Compile Include="TelegramBot\Bot.cs" />
+    <Compile Include="TelegramBot\Commands\Command.cs" />
+    <Compile Include="TelegramBot\Commands\HelloCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
